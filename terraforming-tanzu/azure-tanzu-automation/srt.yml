@@ -1,0 +1,114 @@
+product-name: cf
+network-properties:
+  network:
+    name: services
+  other_availability_zones:
+  - name: "zone-1"
+  - name: "zone-2"
+  - name: "zone-3"
+  singleton_availability_zone:
+    name: "zone-2"
+product-properties:
+  .cloud_controller.apps_domain:
+    value: ((apps-domain))
+  .cloud_controller.system_domain:
+    value: ((sys-domain))
+  .ha_proxy.skip_cert_verify:
+    value: true
+  .mysql_monitor.recipient_email:
+    value: cf-infra@pivotal.io
+  .properties.credhub_internal_provider_keys:
+    value:
+    - key:
+        secret: 1a2b3c4d5e6f7g8h9i0j
+      name: Key
+      primary: true
+  .properties.haproxy_forward_tls:
+    value: disable
+  .properties.nfs_volume_driver:
+    value: disable
+  .properties.networking_poe_ssl_certs:
+    value:
+    - certificate:
+        cert_pem: ((srt-cert.certificate))
+        private_key_pem: ((srt-cert.private_key))
+      name: Certificate
+  .properties.security_acknowledgement:
+    value: X
+  .properties.cf_networking_enable_space_developer_self_service:
+    value: true
+  .properties.secure_service_instance_credentials:
+    value: true
+  .properties.autoscale_enable_notifications:
+    value: false
+  .properties.uaa:
+    value: ldap
+  .properties.uaa.ldap.credentials:
+    value:
+      identity: ((uaa-ldap-credentials-identity))
+      password: ((uaa-ldap-credentials-password))
+  .properties.uaa.ldap.first_name_attribute:
+    value: ((uaa-ldap-first-name-attribute))
+  .properties.uaa.ldap.group_search_base:
+    value: ((uaa-ldap-group-search-base))
+  .properties.uaa.ldap.group_search_filter:
+    value: ((uaa-ldap-group-search-filter))
+  .properties.uaa.ldap.last_name_attribute:
+    value: ((uaa-ldap-last-name-attribute))
+  .properties.uaa.ldap.ldap_referrals:
+    value: follow
+  .properties.uaa.ldap.mail_attribute_name:
+    value: mail
+  .properties.uaa.ldap.search_base:
+    value: ((uaa-ldap-user-search-base))
+  .properties.uaa.ldap.search_filter:
+    value: ((uaa-ldap-user-search-filter))
+  .properties.uaa.ldap.url:
+    value: ((uaa-ldap-url))
+  .properties.enable_smb_volume_driver:
+    value: false
+  .properties.system_blobstore:
+    value: external_azure
+  .properties.system_blobstore.external_azure.access_key:
+    value:
+      secret: ((cf-storage-account-access-key))
+  .properties.system_blobstore.external_azure.account_name:
+    value: ((cf-storage-account-name))
+  .properties.system_blobstore.external_azure.buildpacks_container:
+    value: ((cf-buildpacks-storage-container))
+  .properties.system_blobstore.external_azure.droplets_container:
+    value: ((cf-droplets-storage-container))
+  .properties.system_blobstore.external_azure.packages_container:
+    value: ((cf-packages-storage-container))
+  .properties.system_blobstore.external_azure.resources_container:
+    value: ((cf-resources-storage-container))
+  .uaa.service_provider_key_credentials:
+    value:
+        cert_pem: ((srt-cert.certificate))
+        private_key_pem: ((srt-cert.private_key))
+resource-config:
+  compute:
+    instances: 5
+  control:
+    elb_names:
+    - ((diego-ssh-lb-name))
+    instances: 3
+  router:
+    elb_names:
+    - ((web-lb-name))
+    instances: 3
+  mysql_monitor:
+    instances: 0
+  backup_restore:
+    instances: 0
+errand-config:
+  test-autoscaling:
+    post-deploy-state: false
+  smbbrokerpush:
+    post-deploy-state: false
+  nfsbrokerpush:
+    post-deploy-state: false
+  test-autoscaling:
+    post-deploy-state: false
+  test-autoscaling:
+    post-deploy-state: false

@@ -1,0 +1,30 @@
+product-name: harbor-container-registry
+product-properties:
+  .properties.admin_password:
+    value:
+      secret: ((registry-admin-password))
+  .properties.admin_password_for_smoketest:
+    value:
+      secret: ((registry-admin-password))
+  .properties.hostname:
+    value: ((harbor-hostname))
+  .properties.server_cert_key:
+    value:
+      cert_pem: ((harbor-cert.certificate))
+      private_key_pem: ((harbor-cert.private_key))
+network-properties:
+  network:
+    name: infrastructure
+  other_availability_zones:
+  - name: "zone-1"
+  - name: "zone-2"
+  - name: "zone-3"
+  singleton_availability_zone:
+    name: "zone-1"
+resource-config:
+  harbor-app:
+    elb_names:
+    - ((harbor-lb-name))
+errand-config:
+  smoke-testing:
+    post-deploy-state: false

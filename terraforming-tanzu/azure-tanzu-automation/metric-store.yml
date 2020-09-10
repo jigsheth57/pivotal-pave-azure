@@ -1,0 +1,13 @@
+product-name: metric-store
+network-properties:
+  network:
+    name: services
+  other_availability_zones:
+  - name: "zone-1"
+  - name: "zone-2"
+  - name: "zone-3"
+  singleton_availability_zone:
+    name: "zone-2"
+errand-config:
+  metric-store-smoke-tests:
+    post-deploy-state: false

@@ -1,0 +1,24 @@
+product-name: p-healthwatch
+product-properties:
+  .properties.opsman:
+    selected_option: disable
+    value: disable
+  .properties.boshtasks:
+    selected_option: disable
+    value: disable
+  .healthwatch-forwarder.health_check_az:
+    value: "zone-1"
+network-properties:
+  network:
+    name: infrastructure
+  other_availability_zones:
+  - name: "zone-1"
+  - name: "zone-2"
+  - name: "zone-3"
+  service_network:
+    name: services
+  singleton_availability_zone:
+    name: "zone-1"
+errand-config:
+  smoke-tests:
+    post-deploy-state: false

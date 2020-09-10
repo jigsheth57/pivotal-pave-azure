@@ -1,0 +1,114 @@
+---
+product-name: pivotal-container-service
+product-properties:
+  .pivotal-container-service.pks_tls:
+    value:
+      cert_pem: ((pksapi-cert.certificate))
+      private_key_pem: ((pksapi-cert.private_key))
+  .properties.cloud_provider:
+    selected_option: azure
+    value: Azure
+  .properties.cloud_provider.azure.azure_cloud_name:
+    value: AzurePublicCloud
+  .properties.cloud_provider.azure.azure_master_managed_identity:
+    value: ((master-managed-identity))
+  .properties.cloud_provider.azure.azure_worker_managed_identity:
+    value: ((worker-managed-identity))
+  .properties.cloud_provider.azure.default_security_group:
+    value: ((pcf-resource-group-name))-bosh-deployed-vms-security-group
+  .properties.cloud_provider.azure.location:
+    value: ((location))
+  .properties.cloud_provider.azure.primary_availability_set:
+    value: ((pcf-resource-group-name))-availability-set
+  .properties.cloud_provider.azure.resource_group_name:
+    value: ((pcf-resource-group-name))
+  .properties.cloud_provider.azure.subscription_id:
+    value: ((azure-subscription-id))
+  .properties.cloud_provider.azure.tenant_id:
+    value: ((azure-tenant-id))
+  .properties.cloud_provider.azure.vnet_name:
+    value: ((pcf-resource-group-name))-virtual-network
+  .properties.cloud_provider.azure.vnet_resource_group_name:
+    value: ((pcf-resource-group-name))
+  .properties.log_sink_resources_deploy:
+    value: true
+  .properties.metric_sink_resources_deploy:
+    value: true
+  .properties.pks_api_hostname:
+    value: ((pks-api-hostname))
+  .properties.plan1_selector:
+    selected_option: active
+    value: Plan Active
+  .properties.plan1_selector.active.master_az_placement:
+    value: ["zone-1", "zone-2", "zone-3"]
+  .properties.plan1_selector.active.worker_az_placement:
+    value: ["zone-1", "zone-2", "zone-3"]
+  .properties.plan1_selector.active.kubelet_drain_force_node:
+    value: true
+  .properties.plan2_selector:
+    selected_option: active
+    value: Plan Active
+  .properties.plan2_selector.active.master_az_placement:
+    value: ["zone-1", "zone-2", "zone-3"]
+  .properties.plan2_selector.active.worker_az_placement:
+    value: ["zone-1", "zone-2", "zone-3"]
+  .properties.plan2_selector.active.kubelet_drain_force_node:
+    value: true
+
+  .properties.uaa:
+    value: ldap
+  .properties.uaa.ldap.credentials:
+    value:
+      identity: ((uaa-ldap-credentials-identity))
+      password: ((uaa-ldap-credentials-password))
+  .properties.uaa.ldap.external_groups_whitelist:
+    value: '*'
+  .properties.uaa.ldap.first_name_attribute:
+    value: ((uaa-ldap-first-name-attribute))
+  .properties.uaa.ldap.group_search_base:
+    value: ((uaa-ldap-group-search-base))
+  .properties.uaa.ldap.group_search_filter:
+    value: ((uaa-ldap-group-search-filter))
+  .properties.uaa.ldap.last_name_attribute:
+    value: ((uaa-ldap-last-name-attribute))
+  .properties.uaa.ldap.ldap_referrals:
+    value: follow
+  .properties.uaa.ldap.mail_attribute_name:
+    value: mail
+  .properties.uaa.ldap.search_base:
+    value: ((uaa-ldap-user-search-base))
+  .properties.uaa.ldap.search_filter:
+    value: ((uaa-ldap-user-search-filter))
+  .properties.uaa.ldap.url:
+    value: ((uaa-ldap-url))
+  .properties.oidc_selector:
+    value: enabled
+
+  # .properties.uaa:
+  #   selected_option: internal
+  #   value: internal
+  # .properties.uaa_oidc:
+  #   value: false
+  .properties.telemetry_selector:
+    value: disabled
+  .properties.telemetry_installation_purpose_selector:
+    value: not_provided
+
+network-properties:
+  network:
+    name: infrastructure
+  other_availability_zones:
+  - name: "zone-1"
+  - name: "zone-2"
+  - name: "zone-3"
+  service_network:
+    name: services
+  singleton_availability_zone:
+    name: "zone-3"
+resource-config:
+  pivotal-container-service:
+    elb_names:
+    - ((pks-lb-name))
+errand-config:
+  upgrade-all-service-instances:
+    post-deploy-state: false

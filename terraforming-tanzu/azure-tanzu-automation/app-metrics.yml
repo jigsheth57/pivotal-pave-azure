@@ -1,0 +1,15 @@
+product-name: appMetrics
+network-properties:
+  network:
+    name: services
+  other_availability_zones:
+  - name: "zone-1"
+  - name: "zone-2"
+  - name: "zone-3"
+  singleton_availability_zone:
+    name: "zone-3"
+errand-config:
+  migrate-route:
+    post-deploy-state: false
+  smoke-test:
+    post-deploy-state: false

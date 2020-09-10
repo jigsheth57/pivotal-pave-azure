@@ -1,0 +1,6 @@
+---
+pivnet-api-token: ((pivnet-token))
+pivnet-file-glob: "metric-store*.pivotal"
+pivnet-product-slug: p-metric-store
+product-version-regex: ^1\.4\.\d+$
+stemcell-iaas: azure
