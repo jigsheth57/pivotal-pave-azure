@@ -46,7 +46,7 @@ function get_jq()
 	fi
 }
 trap 'abort' 0
-echo "Staring to pave Azure for PKS installation"
+echo "Starting to pave Azure for TKGI installation"
 
 if [ -f "$TERRAFORM_INPUT_FILE" ]; then
   get_jq

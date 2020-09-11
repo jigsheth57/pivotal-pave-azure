@@ -1,0 +1,13 @@
+.DS_Store
+
+**/*-mds.*
+**/terraform-output.*
+**/*.pem
+**/terraform-orig.*
+**/*.tfstate
+**/*.tfplan
+**/terraform.zip
+**/.terraform
+**/jq
+**/terraform
+tanzu-terraforming-azure.tar
