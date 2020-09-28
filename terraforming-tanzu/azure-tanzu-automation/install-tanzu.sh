@@ -72,7 +72,7 @@ function get_clis()
 }
 
 trap 'abort' 0
-echo "Staring installation of Tanzu on Azure"
+echo "Starting installation of Tanzu on Azure"
 
 if [ -f "$TERRAFORM_OUTPUT_FILE" ]; then
   if ! [ -x jq ]; then

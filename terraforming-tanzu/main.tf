@@ -21,6 +21,7 @@ module "infra" {
   dns_suffix                        = var.dns_suffix
   pcf_infrastructure_subnet         = var.pcf_infrastructure_subnet
   pcf_virtual_network_address_space = var.pcf_virtual_network_address_space
+  virtual_network                   = var.virtual_network
 }
 
 module "ops_manager" {
@@ -159,3 +160,5 @@ resource "azurerm_availability_set" "pks" {
   location            = var.location
   resource_group_name = module.infra.resource_group_name
 }
+
+variable "virtual_network" {}
