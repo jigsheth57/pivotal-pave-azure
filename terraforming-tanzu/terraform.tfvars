@@ -18,4 +18,6 @@ location              = "CentralUS"
 ops_manager_image_uri = "https://opsmanagereastus.blob.core.windows.net/images/ops-manager-2.9.11-build.186.vhd"
 dns_suffix            = "azure.tanzuapps.org"
 vm_admin_username     = "ubuntu"
-virtual_network       = "your-virtual-network"
+
+# If you  specify a virtual network you will need to make modifications to Terraform references
+# virtual_network       = "your-virtual-network"
