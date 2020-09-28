@@ -13,18 +13,14 @@
 #Note about install-tanzu.sh
 The install will download files from PivNet and then upload them to Ops Manager.  If the machine you're running this on has sufficient bandwidth then continue with the above. Otherwise, you can log into the Ops Manager VM and execute the command there to greatly expedite the process.  To do so execute the following (assumes Linux environment).
 
-1. `cd azure-tanzu-automation`
-2. `jq -r '.ops_manager_ssh_private_key.value' terraform-output.json > opsman.pem`
-3. `chmod 400 opsman.pem`
-4. `cd ../..`
 5. `tar cvf tanzu-terraforming-azure.tar *`
-6. `scp -o "StrictHostKeyChecking no" -i terraforming-tanzu/azure-tanzu-automation/opsman.pem tanzu-terraforming-azure.tar ubuntu@opsman.<Environment Name>.<Your Domain>:~`
-7. `ssh -o "StrictHostKeyChecking no" -i terraforming-tanzu/azure-tanzu-automation/opsman.pem ubuntu@opsman.<Environment Name>.<Your Domain>`
+6. `scp -o "StrictHostKeyChecking no" -i opsman.pem tanzu-terraforming-azure.tar ubuntu@opsman.<Environment Name>.<Your Domain>:~`
+7. `ssh -o "StrictHostKeyChecking no" -i opsman.pem ubuntu@opsman.<Environment Name>.<Your Domain>`
 8. `mkdir exelon`
 9. `mv tanzu-terraforming-azure.tar exelon/`
 10. `cd exelon`
 11. `tar xvf tanzu-terraforming-azure.tar`
-12. `cd terraforming-tanzu/azure-tanzu-automation`
+12. `cd azure-tanzu-automation`
 13. `./install-tanzu.sh`
 
 ## Variables

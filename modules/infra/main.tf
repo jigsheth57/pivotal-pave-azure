@@ -23,9 +23,16 @@ variable "pcf_infrastructure_subnet" {
   default = ""
 }
 
-resource "azurerm_resource_group" "pcf_resource_group" {
+variable "virtual_network" {}
+
+# resource "azurerm_resource_group" "pcf_resource_group" {
+#   name     = "${var.env_name}"
+#   location = "${var.location}"
+# }
+
+data "azurerm_resource_group" "pcf_resource_group" {
   name     = "${var.env_name}"
-  location = "${var.location}"
+  # location = "${var.location}"
 }
 
 # ============== Security Groups ===============
@@ -33,7 +40,7 @@ resource "azurerm_resource_group" "pcf_resource_group" {
 resource "azurerm_network_security_group" "ops_manager_security_group" {
   name                = "${var.env_name}-ops-manager-security-group"
   location            = "${var.location}"
-  resource_group_name = "${azurerm_resource_group.pcf_resource_group.name}"
+  resource_group_name = "${data.azurerm_resource_group.pcf_resource_group.name}"
 
   security_rule {
     name                       = "ssh"
@@ -87,7 +94,7 @@ resource "azurerm_network_security_group" "ops_manager_security_group" {
 resource "azurerm_network_security_group" "bosh_deployed_vms_security_group" {
   name                = "${var.env_name}-bosh-deployed-vms-security-group"
   location            = "${var.location}"
-  resource_group_name = "${azurerm_resource_group.pcf_resource_group.name}"
+  resource_group_name = "${data.azurerm_resource_group.pcf_resource_group.name}"
 
   security_rule {
     name                       = "internal-anything"
@@ -212,24 +219,25 @@ resource "azurerm_network_security_group" "bosh_deployed_vms_security_group" {
 
 # ============= Networking
 
-# resource "azurerm_virtual_network" "pcf_virtual_network" {
-#   name                = "${var.env_name}-virtual-network"
-#   depends_on          = ["azurerm_resource_group.pcf_resource_group"]
-#   resource_group_name = "${azurerm_resource_group.pcf_resource_group.name}"
-#   address_space       = "${var.pcf_virtual_network_address_space}"
-#   location            = "${var.location}"
-# }
-
-data "azurerm_virtual_network" "pcf_virtual_network" {
-  name                = "${var.virtual_network}"
-  resource_group_name = "${azurerm_resource_group.pcf_resource_group.name}"
+resource "azurerm_virtual_network" "pcf_virtual_network" {
+  name                = "${var.env_name}-virtual-network"
+  depends_on          = ["data.azurerm_resource_group.pcf_resource_group"]
+  resource_group_name = "${data.azurerm_resource_group.pcf_resource_group.name}"
+  address_space       = "${var.pcf_virtual_network_address_space}"
+  location            = "${var.location}"
 }
+
+# Uncomment and change vars to use this if you want to use your own
+# data "azurerm_virtual_network" "pcf_virtual_network" {
+#   name                = "${var.virtual_network}"
+#   resource_group_name = "${data.azurerm_resource_group.pcf_resource_group.name}"
+# }
 
 resource "azurerm_subnet" "infrastructure_subnet" {
   name                      = "${var.env_name}-infrastructure-subnet"
-  depends_on                = ["azurerm_resource_group.pcf_resource_group"]
-  resource_group_name       = "${azurerm_resource_group.pcf_resource_group.name}"
-  virtual_network_name      = "${data.azurerm_virtual_network.pcf_virtual_network.name}"
+  depends_on                = ["data.azurerm_resource_group.pcf_resource_group"]
+  resource_group_name       = "${data.azurerm_resource_group.pcf_resource_group.name}"
+  virtual_network_name      = "${azurerm_virtual_network.pcf_virtual_network.name}"
   address_prefix            = "${var.pcf_infrastructure_subnet}"
   network_security_group_id = "${azurerm_network_security_group.ops_manager_security_group.id}"
 }
@@ -247,7 +255,7 @@ locals {
 
 resource "azurerm_dns_zone" "env_dns_zone" {
   name                = "${var.dns_subdomain != "" ? var.dns_subdomain : local.dns_subdomain}.${var.dns_suffix}"
-  resource_group_name = "${azurerm_resource_group.pcf_resource_group.name}"
+  resource_group_name = "${data.azurerm_resource_group.pcf_resource_group.name}"
 }
 
 output "dns_zone_name" {
@@ -259,11 +267,14 @@ output "dns_zone_name_servers" {
 }
 
 output "resource_group_name" {
-  value = "${azurerm_resource_group.pcf_resource_group.name}"
+  value = "${data.azurerm_resource_group.pcf_resource_group.name}"
 }
 
+# output "network_name" {
+#   value = "${data.azurerm_virtual_network.pcf_virtual_network.name}"
+# }
 output "network_name" {
-  value = "${data.azurerm_virtual_network.pcf_virtual_network.name}"
+  value = "${azurerm_virtual_network.pcf_virtual_network.name}"
 }
 
 output "infrastructure_subnet_id" {
