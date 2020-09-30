@@ -23,7 +23,7 @@ variable "pcf_infrastructure_subnet" {
   default = ""
 }
 
-variable "virtual_network" {}
+# variable "virtual_network" {}
 
 # resource "azurerm_resource_group" "pcf_resource_group" {
 #   name     = "${var.env_name}"
