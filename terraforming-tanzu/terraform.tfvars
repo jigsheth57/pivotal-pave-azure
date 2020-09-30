@@ -2,9 +2,12 @@
 # az cloud set --name AzureCloud
 # az ad app create --display-name "Service Principal for BOSH" --password "PASSWORD" --homepage "http://BOSHAzureCPI" --identifier-uris "http://BOSHAzureCPI"
 # az ad sp create --id YOUR-APPLICATION-ID
-# az role definition create --role-definition "contributor-plus-role.json"
-# az role assignment create --assignee "SERVICE-PRINCIPAL-NAME" --role "ContributorPlus" --scope /subscriptions/SUBSCRIPTION-ID
+# az role assignment create --assignee "SERVICE-PRINCIPAL-NAME" --role "Owner" --scope /subscriptions/SUBSCRIPTION-ID
 # az role assignment list --assignee "SERVICE-PRINCIPAL-NAME"
+# az login --service-principal --username "SERVICE-PRINCIPAL-NAME" --password "PASSWORD" --tenant "TENANT-ID"
+# az provider register --namespace Microsoft.Storage
+# az provider register --namespace Microsoft.Network
+# az provider register --namespace Microsoft.Compute
 
 subscription_id       = "32e53c10-5a1c-49d8-871b-ea707baXXXXX"
 tenant_id             = "29248f74-371f-4db2-9a50-c62a687XXXXX"
