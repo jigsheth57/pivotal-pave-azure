@@ -10,6 +10,7 @@ resource "azurerm_storage_account" "bosh_root_storage_account" {
   location                 = "${var.location}"
   account_tier             = "Standard"
   account_replication_type = "LRS"
+  allow_blob_public_access = true
 
   tags = {
     environment = "${var.env_name}"
@@ -17,15 +18,9 @@ resource "azurerm_storage_account" "bosh_root_storage_account" {
   }
 }
 
-resource "azurerm_advanced_threat_protection" "bosh_root_storage_account" {
-  target_resource_id = azurerm_storage_account.bosh_root_storage_account.id
-  enabled            = false
-}
-
 resource "azurerm_storage_container" "bosh_storage_container" {
   name                  = "bosh"
   depends_on            = ["azurerm_storage_account.bosh_root_storage_account"]
-  resource_group_name   = "${data.azurerm_resource_group.pcf_resource_group.name}"
   storage_account_name  = "${azurerm_storage_account.bosh_root_storage_account.name}"
   container_access_type = "private"
 }
@@ -33,14 +28,12 @@ resource "azurerm_storage_container" "bosh_storage_container" {
 resource "azurerm_storage_container" "stemcell_storage_container" {
   name                  = "stemcell"
   depends_on            = ["azurerm_storage_account.bosh_root_storage_account"]
-  resource_group_name   = "${data.azurerm_resource_group.pcf_resource_group.name}"
   storage_account_name  = "${azurerm_storage_account.bosh_root_storage_account.name}"
   container_access_type = "blob"
 }
 
 resource "azurerm_storage_table" "stemcells_storage_table" {
   name                 = "stemcells"
-  resource_group_name  = "${data.azurerm_resource_group.pcf_resource_group.name}"
   storage_account_name = "${azurerm_storage_account.bosh_root_storage_account.name}"
 }
 

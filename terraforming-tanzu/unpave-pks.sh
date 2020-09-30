@@ -23,9 +23,9 @@ function abort()
 function get_terrform()
 {
 	if [ $OS == "Linux" ]; then
-		TERRAFORM_FILE="https://releases.hashicorp.com/terraform/0.12.29/terraform_0.12.29_linux_amd64.zip"
+		TERRAFORM_FILE="https://releases.hashicorp.com/terraform/0.13.3/terraform_0.13.3_linux_amd64.zip"
 	elif [ $OS == "Darwin" ]; then
-		TERRAFORM_FILE="https://releases.hashicorp.com/terraform/0.12.29/terraform_0.12.29_darwin_amd64.zip"
+		TERRAFORM_FILE="https://releases.hashicorp.com/terraform/0.13.3/terraform_0.13.3_darwin_amd64.zip"
 	fi
 	WGET_CMD="wget -q $TERRAFORM_FILE -O $CWD/terraform.zip"
 	if `$WGET_CMD`; then

@@ -1,5 +1,5 @@
 terraform {
-  required_version = "~> 0.12.0"
+  required_version = "~> 0.13.0"
 }
 
 provider "azurerm" {
@@ -9,7 +9,8 @@ provider "azurerm" {
   tenant_id       = var.tenant_id
   environment     = var.cloud_name
 
-  version = "~> 1.32"
+  version = "=2.29.0"
+  features {}
 }
 
 module "infra" {
@@ -138,7 +139,7 @@ resource "azurerm_user_assigned_identity" "pks_master_identity" {
 
 resource "azurerm_role_assignment" "master_role_assignemnt" {
   scope              = "${data.azurerm_subscription.primary.id}/resourceGroups/${var.env_name}"
-  role_definition_id = azurerm_role_definition.pks_master_role.id
+  role_definition_id = azurerm_role_definition.pks_master_role.role_definition_resource_id
   principal_id       = azurerm_user_assigned_identity.pks_master_identity.principal_id
 }
 
@@ -151,7 +152,7 @@ resource "azurerm_user_assigned_identity" "pks_worker_identity" {
 
 resource "azurerm_role_assignment" "worker_role_assignemnt" {
   scope              = "${data.azurerm_subscription.primary.id}/resourceGroups/${var.env_name}"
-  role_definition_id = azurerm_role_definition.pks_worker_role.id
+  role_definition_id = azurerm_role_definition.pks_worker_role.role_definition_resource_id
   principal_id       = azurerm_user_assigned_identity.pks_worker_identity.principal_id
 }
 
