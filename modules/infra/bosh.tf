@@ -17,6 +17,11 @@ resource "azurerm_storage_account" "bosh_root_storage_account" {
   }
 }
 
+resource "azurerm_advanced_threat_protection" "bosh_root_storage_account" {
+  target_resource_id = azurerm_storage_account.bosh_root_storage_account.id
+  enabled            = false
+}
+
 resource "azurerm_storage_container" "bosh_storage_container" {
   name                  = "bosh"
   depends_on            = ["azurerm_storage_account.bosh_root_storage_account"]

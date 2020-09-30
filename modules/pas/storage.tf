@@ -19,6 +19,11 @@ resource "azurerm_storage_account" "cf_storage_account" {
   }
 }
 
+resource "azurerm_advanced_threat_protection" "cf_storage_account" {
+  target_resource_id = azurerm_storage_account.cf_storage_account.id
+  enabled            = false
+}
+
 resource "azurerm_storage_container" "cf_buildpacks_storage_container" {
   name                  = "${var.cf_buildpacks_storage_container_name}"
   depends_on            = ["azurerm_storage_account.cf_storage_account"]

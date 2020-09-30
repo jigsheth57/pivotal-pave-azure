@@ -13,6 +13,11 @@ resource "azurerm_storage_account" "ops_manager_storage_account" {
   }
 }
 
+resource "azurerm_advanced_threat_protection" "ops_manager_storage_account" {
+  target_resource_id = azurerm_storage_account.ops_manager_storage_account.id
+  enabled            = false
+}
+
 resource "azurerm_storage_container" "ops_manager_storage_container" {
   name                  = "opsmanagerimage"
   depends_on            = ["azurerm_storage_account.ops_manager_storage_account"]
