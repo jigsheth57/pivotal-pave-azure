@@ -14,7 +14,10 @@ resource "azurerm_lb" "pks-lb" {
 
   frontend_ip_configuration {
     name                 = "${azurerm_public_ip.pks-lb-ip.name}"
-    public_ip_address_id = "${azurerm_public_ip.pks-lb-ip.id}"
+    subnet_id                     = "${var.infra_subnet_id}"
+    private_ip_address_allocation = "static"
+    private_ip_address            = "${var.pks_lb_private_ip}"
+#    public_ip_address_id = "${azurerm_public_ip.pks-lb-ip.id}"
   }
 }
 

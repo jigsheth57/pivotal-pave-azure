@@ -3,7 +3,7 @@ resource "azurerm_dns_a_record" "apps" {
   zone_name           = "${var.dns_zone_name}"
   resource_group_name = "${var.resource_group_name}"
   ttl                 = "60"
-  records             = ["${azurerm_public_ip.web-lb-ip.ip_address}"]
+  records             = ["${var.web_lb_private_ip}"]
 }
 
 resource "azurerm_dns_a_record" "sys" {
@@ -11,7 +11,7 @@ resource "azurerm_dns_a_record" "sys" {
   zone_name           = "${var.dns_zone_name}"
   resource_group_name = "${var.resource_group_name}"
   ttl                 = "60"
-  records             = ["${azurerm_public_ip.web-lb-ip.ip_address}"]
+  records             = ["${var.web_lb_private_ip}"]
 }
 
 resource "azurerm_dns_a_record" "ssh" {
@@ -19,5 +19,5 @@ resource "azurerm_dns_a_record" "ssh" {
   zone_name           = "${var.dns_zone_name}"
   resource_group_name = "${var.resource_group_name}"
   ttl                 = "60"
-  records             = ["${azurerm_public_ip.ssh-lb-ip.ip_address}"]
+  records             = ["${var.ssh_lb_private_ip}"]
 }

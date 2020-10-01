@@ -86,6 +86,30 @@ variable "ops_manager_private_ip" {
   default     = "10.0.5.4"
 }
 
+variable "harbor_lb_private_ip" {
+  type        = string
+  description = "IP for the Ops Manager instance if not deploying in the default infrastructure subnet"
+  default     = "10.0.5.5"
+}
+
+variable "pks_lb_private_ip" {
+  type        = string
+  description = "IP for the Ops Manager instance if not deploying in the default infrastructure subnet"
+  default     = "10.0.5.9"
+}
+
+variable "ssh_lb_private_ip" {
+  type        = string
+  description = "IP for the Ops Manager instance if not deploying in the default infrastructure subnet"
+  default     = "10.0.5.13"
+}
+
+variable "web_lb_private_ip" {
+  type        = string
+  description = "IP for the Ops Manager instance if not deploying in the default infrastructure subnet"
+  default     = "10.0.5.17"
+}
+
 variable "optional_ops_manager_image_uri" {
   default = ""
 }
@@ -139,7 +163,7 @@ variable "pcf_virtual_network_address_space" {
 
 variable "pcf_infrastructure_subnet" {
   type    = string
-  default = "10.0.5.0/26"
+  default = "10.0.5.0/24"
 }
 
 variable "pcf_services_subnet" {

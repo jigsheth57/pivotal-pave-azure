@@ -26,10 +26,10 @@ networks-configuration:
   - name: infrastructure
     subnets:
     - iaas_identifier: ((pcf-resource-group-name))-virtual-network/((pcf-resource-group-name))-infrastructure-subnet
-      cidr: 10.0.5.0/26
+      cidr: 10.0.5.0/24
       dns: 168.63.129.16
       gateway: 10.0.5.1
-      reserved_ip_ranges: 10.0.5.0-10.0.5.4
+      reserved_ip_ranges: 10.0.5.0-10.0.5.25
       availability_zone_names:
       - zone-1
       - zone-2
@@ -40,7 +40,7 @@ networks-configuration:
       cidr: 10.0.4.0/24
       dns: 168.63.129.16
       gateway: 10.0.4.1
-      reserved_ip_ranges: 10.0.4.0-10.0.4.3
+      reserved_ip_ranges: 10.0.4.0-10.0.4.10
       availability_zone_names:
       - zone-1
       - zone-2

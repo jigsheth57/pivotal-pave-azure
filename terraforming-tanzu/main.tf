@@ -57,11 +57,14 @@ module "pas" {
   cf_droplets_storage_container_name   = var.cf_droplets_storage_container_name
   cf_packages_storage_container_name   = var.cf_packages_storage_container_name
   cf_resources_storage_container_name  = var.cf_resources_storage_container_name
+  ssh_lb_private_ip = var.ssh_lb_private_ip
+  web_lb_private_ip = var.web_lb_private_ip
 
   resource_group_name                 = module.infra.resource_group_name
   dns_zone_name                       = module.infra.dns_zone_name
   network_name                        = module.infra.network_name
   bosh_deployed_vms_security_group_id = module.infra.bosh_deployed_vms_security_group_id
+  infra_subnet_id = module.infra.infrastructure_subnet_id
 }
 
 module "certs" {
@@ -80,6 +83,8 @@ module "pks" {
   location = var.location
   services_subnet_cidr = var.pcf_services_subnet
   infrastructure_subnet_cidr = var.pcf_infrastructure_subnet
+  harbor_lb_private_ip = var.harbor_lb_private_ip
+  pks_lb_private_ip = var.pks_lb_private_ip
 
   resource_group_cidr = var.pcf_virtual_network_address_space[0]
 
@@ -87,6 +92,7 @@ module "pks" {
   dns_zone_name                       = module.infra.dns_zone_name
   network_name                        = module.infra.network_name
   bosh_deployed_vms_security_group_id = module.infra.bosh_deployed_vms_security_group_id
+  infra_subnet_id = module.infra.infrastructure_subnet_id
 }
 
 data "azurerm_subscription" "primary" {

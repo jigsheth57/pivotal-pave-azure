@@ -10,4 +10,8 @@
 **/.terraform
 **/jq
 **/terraform
+terraforming-tanzu/terraform.tfvars
+terraforming-tanzu/opsman.pem
+terraforming-tanzu/azure-tanzu-automation/terraform-output.json
+terraforming-tanzu/azure-tanzu-automation/creds.yml
 tanzu-terraforming-azure.tar
