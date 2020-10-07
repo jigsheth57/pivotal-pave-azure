@@ -92,9 +92,14 @@ module "pks" {
 data "azurerm_subscription" "primary" {
 }
 
+data "azurerm_resource_group" "primary" {
+  name     = "${var.env_name}"
+}
+
 resource "azurerm_role_definition" "pks_master_role" {
   name        = "${var.env_name}-pks-master-role"
-  scope       = data.azurerm_subscription.primary.id
+  # scope       = data.azurerm_subscription.primary.id
+  scope       = data.azurerm_resource_group.primary.id
   description = "This is a custom role created via Terraform"
 
   permissions {
@@ -115,7 +120,8 @@ resource "azurerm_role_definition" "pks_master_role" {
 
 resource "azurerm_role_definition" "pks_worker_role" {
   name        = "${var.env_name}-pks-worker-role"
-  scope       = data.azurerm_subscription.primary.id
+  # scope       = data.azurerm_subscription.primary.id
+  scope       = data.azurerm_resource_group.primary.id
   description = "This is a custom role created via Terraform"
 
   permissions {

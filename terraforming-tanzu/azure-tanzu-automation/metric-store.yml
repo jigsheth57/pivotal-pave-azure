@@ -8,6 +8,3 @@ network-properties:
   - name: "zone-3"
   singleton_availability_zone:
     name: "zone-2"
-errand-config:
-  metric-store-smoke-tests:
-    post-deploy-state: false
