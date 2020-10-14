@@ -1,11 +1,3 @@
-output "pks-master-app-sec-group" {
-  value = "${azurerm_application_security_group.pks-master.id}"
-}
-
-output "pks-api-app-sec-group" {
-  value = "${azurerm_application_security_group.pks-api.id}"
-}
-
 output "pks_lb_name" {
   value = "${azurerm_lb.pks-lb.name}"
 }

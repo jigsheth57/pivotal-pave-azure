@@ -1,10 +1,10 @@
-resource "azurerm_public_ip" "pks-lb-ip" {
-  name                = "${var.env_id}-pks-lb-ip"
-  location            = "${var.location}"
-  resource_group_name = "${var.resource_group_name}"
-  allocation_method   = "Static"
-  sku                 = "Standard"
-}
+# resource "azurerm_public_ip" "pks-lb-ip" {
+#   name                = "${var.env_id}-pks-lb-ip"
+#   location            = "${var.location}"
+#   resource_group_name = "${var.resource_group_name}"
+#   allocation_method   = "Static"
+#   sku                 = "Standard"
+# }
 
 resource "azurerm_lb" "pks-lb" {
   name                = "${var.env_id}-pks-lb"
@@ -13,7 +13,7 @@ resource "azurerm_lb" "pks-lb" {
   resource_group_name = "${var.resource_group_name}"
 
   frontend_ip_configuration {
-    name                 = "${azurerm_public_ip.pks-lb-ip.name}"
+    name                          = "pks-lb-ip"
     subnet_id                     = "${var.infra_subnet_id}"
     private_ip_address_allocation = "static"
     private_ip_address            = "${var.pks_lb_private_ip}"
@@ -44,7 +44,7 @@ resource "azurerm_lb_rule" "pks-lb-uaa-rule" {
   protocol                       = "Tcp"
   frontend_port                  = 8443
   backend_port                   = 8443
-  frontend_ip_configuration_name = "${azurerm_public_ip.pks-lb-ip.name}"
+  frontend_ip_configuration_name = "pks-lb-ip"
   probe_id                       = "${azurerm_lb_probe.pks-lb-uaa-health-probe.id}"
   backend_address_pool_id        = "${azurerm_lb_backend_address_pool.pks-lb-backend-pool.id}"
 }
@@ -66,7 +66,7 @@ resource "azurerm_lb_rule" "pks-lb-api-rule" {
   protocol                       = "Tcp"
   frontend_port                  = 9021
   backend_port                   = 9021
-  frontend_ip_configuration_name = "${azurerm_public_ip.pks-lb-ip.name}"
+  frontend_ip_configuration_name = "pks-lb-ip"
   probe_id                       = "${azurerm_lb_probe.pks-lb-api-health-probe.id}"
   backend_address_pool_id        = "${azurerm_lb_backend_address_pool.pks-lb-backend-pool.id}"
 }

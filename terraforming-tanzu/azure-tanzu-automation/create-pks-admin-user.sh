@@ -34,9 +34,9 @@ function get_jq()
 function get_om()
 {
 	if [ $OS == "Linux" ]; then
-		OM_FILE="https://github.com/pivotal-cf/om/releases/download/6.1.1/om-linux-6.1.1"
+		OM_FILE="https://github.com/pivotal-cf/om/releases/download/6.4.1/om-linux-6.4.1"
 	elif [ $OS == "Darwin" ]; then
-		OM_FILE="https://github.com/pivotal-cf/om/releases/download/6.1.1/om-darwin-6.1.1"
+		OM_FILE="https://github.com/pivotal-cf/om/releases/download/6.4.1/om-darwin-6.4.1"
 	fi
 	WGET_CMD="wget -q $OM_FILE -O $CWD/om"
 	if `$WGET_CMD`; then
@@ -72,8 +72,10 @@ if [ -f "$TERRAFORM_OUTPUT_FILE" ]; then
   else
     uaac target $PKS_API_HOSTNAME:8443 --skip-ssl-validation
     uaac token client get admin -s $UAA_ADMIN_SECRET
-    uaac user add pksadmin --emails pksadmin@example.com -p $ADMIN_USER_SECRET
-    uaac member add pks.clusters.admin pksadmin
+    if [ `uaac user get pksadmin | grep -c 'id:'` -eq 0 ]; then      
+      uaac user add pksadmin --emails pksadmin@example.com -p $ADMIN_USER_SECRET
+      uaac member add pks.clusters.admin pksadmin
+    fi
   fi
 fi
 trap : 0

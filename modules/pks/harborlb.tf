@@ -1,11 +1,11 @@
-resource "azurerm_public_ip" "harbor-lb-ip" {
-  name                    = "harbor-lb-ip"
-  location                = "${var.location}"
-  resource_group_name     = "${var.resource_group_name}"
-  allocation_method       = "Static"
-  sku                     = "Standard"
-  idle_timeout_in_minutes = 30
-}
+# resource "azurerm_public_ip" "harbor-lb-ip" {
+#   name                    = "harbor-lb-ip"
+#   location                = "${var.location}"
+#   resource_group_name     = "${var.resource_group_name}"
+#   allocation_method       = "Static"
+#   sku                     = "Standard"
+#   idle_timeout_in_minutes = 30
+# }
 
 resource "azurerm_lb" "harbor-lb" {
   name                = "${var.env_id}-harbor-lb"
@@ -14,7 +14,7 @@ resource "azurerm_lb" "harbor-lb" {
   resource_group_name = "${var.resource_group_name}"
 
   frontend_ip_configuration {
-    name                 = "${azurerm_public_ip.harbor-lb-ip.name}"
+    name                          = "harbor-lb-ip"
     subnet_id                     = "${var.infra_subnet_id}"
     private_ip_address_allocation = "static"
     private_ip_address            = "${var.harbor_lb_private_ip}"
@@ -40,7 +40,7 @@ resource "azurerm_lb_rule" "harbor-https-rule" {
   resource_group_name = "${var.resource_group_name}"
   loadbalancer_id     = "${azurerm_lb.harbor-lb.id}"
 
-  frontend_ip_configuration_name = "${azurerm_public_ip.harbor-lb-ip.name}"
+  frontend_ip_configuration_name = "harbor-lb-ip"
   protocol                       = "TCP"
   frontend_port                  = 443
   backend_port                   = 443
@@ -63,7 +63,7 @@ resource "azurerm_lb_rule" "harbor-http-rule" {
   resource_group_name = "${var.resource_group_name}"
   loadbalancer_id     = "${azurerm_lb.harbor-lb.id}"
 
-  frontend_ip_configuration_name = "${azurerm_public_ip.harbor-lb-ip.name}"
+  frontend_ip_configuration_name = "harbor-lb-ip"
   protocol                       = "TCP"
   frontend_port                  = 80
   backend_port                   = 80
@@ -78,7 +78,7 @@ resource "azurerm_lb_rule" "harbor-ntp" {
   resource_group_name = "${var.resource_group_name}"
   loadbalancer_id     = "${azurerm_lb.harbor-lb.id}"
 
-  frontend_ip_configuration_name = "${azurerm_public_ip.harbor-lb-ip.name}"
+  frontend_ip_configuration_name = "harbor-lb-ip"
   protocol                       = "UDP"
   frontend_port                  = "123"
   backend_port                   = "123"

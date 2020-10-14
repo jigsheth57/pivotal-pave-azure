@@ -1,11 +1,11 @@
-resource "azurerm_public_ip" "ssh-lb-ip" {
-  name                    = "ssh-lb-ip"
-  location                = "${var.location}"
-  resource_group_name     = "${var.resource_group_name}"
-  allocation_method       = "Static"
-  sku                     = "Standard"
-  idle_timeout_in_minutes = 30
-}
+# resource "azurerm_public_ip" "ssh-lb-ip" {
+#   name                    = "ssh-lb-ip"
+#   location                = "${var.location}"
+#   resource_group_name     = "${var.resource_group_name}"
+#   allocation_method       = "Static"
+#   sku                     = "Standard"
+#   idle_timeout_in_minutes = 30
+# }
 
 resource "azurerm_lb" "ssh-lb" {
   name                = "${var.env_id}-ssh-lb"
@@ -14,7 +14,7 @@ resource "azurerm_lb" "ssh-lb" {
   resource_group_name = "${var.resource_group_name}"
 
   frontend_ip_configuration {
-    name                 = "${azurerm_public_ip.ssh-lb-ip.name}"
+    name                          = "ssh-lb-ip"
     subnet_id                     = "${var.infra_subnet_id}"
     private_ip_address_allocation = "static"
     private_ip_address            = "${var.ssh_lb_private_ip}"
@@ -41,7 +41,7 @@ resource "azurerm_lb_rule" "ssh-tcp-rule" {
   resource_group_name = "${var.resource_group_name}"
   loadbalancer_id     = "${azurerm_lb.ssh-lb.id}"
 
-  frontend_ip_configuration_name = "${azurerm_public_ip.ssh-lb-ip.name}"
+  frontend_ip_configuration_name = "ssh-lb-ip"
   protocol                       = "TCP"
   frontend_port                  = 2222
   backend_port                   = 2222
@@ -56,7 +56,7 @@ resource "azurerm_lb_rule" "ssh-ntp" {
   resource_group_name = "${var.resource_group_name}"
   loadbalancer_id     = "${azurerm_lb.ssh-lb.id}"
 
-  frontend_ip_configuration_name = "${azurerm_public_ip.ssh-lb-ip.name}"
+  frontend_ip_configuration_name = "ssh-lb-ip"
   protocol                       = "UDP"
   frontend_port                  = "123"
   backend_port                   = "123"

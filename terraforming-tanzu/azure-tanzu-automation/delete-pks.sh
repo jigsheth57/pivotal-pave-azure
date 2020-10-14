@@ -16,11 +16,28 @@ function abort()
     echo "An error occurred. Exiting..." >&2
 		exit 1
 }
+function get_om()
+{
+	if [ $OS == "Linux" ]; then
+		OM_FILE="https://github.com/pivotal-cf/om/releases/download/6.4.1/om-linux-6.4.1"
+	elif [ $OS == "Darwin" ]; then
+		OM_FILE="https://github.com/pivotal-cf/om/releases/download/6.4.1/om-darwin-6.4.1"
+	fi
+	WGET_CMD="wget -q $OM_FILE -O $CWD/om"
+	if `$WGET_CMD`; then
+		chmod 755 $CWD/om
+	fi
+}
+
 trap 'abort' 0
 echo "Delete installtion of PKS on Azure"
 
+if ! [ -x om ]; then
+  get_om
+fi
+
 $CWD/om --env $CWD/env-fix.yml delete-installation --force
-rm -rf $CWD/*-fix.yml $CWD/terraform-creds.yml $CWD/jq $CWD/om $CWD/pivnet $CWD/downloaded-files $CWD/*.cert $CWD/terraform-output.json
+rm -rf $CWD/*-fix.yml $CWD/terraform-creds.yml $CWD/jq $CWD/om $CWD/pivnet $CWD/kubectl $CWD/pks $CWD/tkgi $CWD/downloaded-files $CWD/*.cert $CWD/terraform-output.json
 
 trap : 0
 

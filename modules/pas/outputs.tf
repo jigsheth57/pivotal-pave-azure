@@ -54,9 +54,3 @@ output "cf_resources_storage_container_name" {
 output "cf_buildpacks_storage_container_name" {
   value = "${azurerm_storage_container.cf_buildpacks_storage_container.name}"
 }
-
-# Deprecated
-
-output "services_subnet_cidrs" {
-  value = ["${azurerm_subnet.services_subnet.address_prefix}"]
-}

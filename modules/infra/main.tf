@@ -55,6 +55,18 @@ resource "azurerm_network_security_group" "ops_manager_security_group" {
   }
 
   security_rule {
+    name                       = "http"
+    priority                   = 204
+    direction                  = "Inbound"
+    access                     = "Allow"
+    protocol                   = "Tcp"
+    source_port_range          = "*"
+    destination_port_range     = 80
+    source_address_prefix      = "Internet"
+    destination_address_prefix = "VirtualNetwork"
+  }
+
+  security_rule {
     name                       = "https"
     priority                   = 205
     direction                  = "Inbound"
@@ -157,6 +169,18 @@ resource "azurerm_network_security_group" "bosh_deployed_vms_security_group" {
   }
 
   security_rule {
+    name                       = "http"
+    priority                   = 204
+    direction                  = "Inbound"
+    access                     = "Allow"
+    protocol                   = "Tcp"
+    source_port_range          = "*"
+    destination_port_range     = 80
+    source_address_prefix      = "Internet"
+    destination_address_prefix = "VirtualNetwork"
+  }
+
+  security_rule {
     name                       = "https"
     priority                   = 205
     direction                  = "Inbound"
@@ -252,6 +276,7 @@ locals {
   dns_subdomain = "${var.env_name}"
 }
 
+# resource "azurerm_dns_zone" "env_dns_zone" {
 resource "azurerm_dns_zone" "env_dns_zone" {
   name                = "${var.dns_subdomain != "" ? var.dns_subdomain : local.dns_subdomain}.${var.dns_suffix}"
   resource_group_name = "${data.azurerm_resource_group.pcf_resource_group.name}"
@@ -306,10 +331,4 @@ output "bosh_deployed_vms_security_group_id" {
 
 output "bosh_deployed_vms_security_group_name" {
   value = "${azurerm_network_security_group.bosh_deployed_vms_security_group.name}"
-}
-
-# Deprecated
-
-output "infrastructure_subnet_cidrs" {
-  value = ["${azurerm_subnet.infrastructure_subnet.address_prefix}"]
 }

@@ -11,6 +11,7 @@ OPSMAN_CERT=$CWD/opsman.pem
 TERRAFORM_INPUT_FILE=$CWD/terraform.tfvars
 OS=$(uname)
 export PATH=.:$PATH
+export ARM_SKIP_PROVIDER_REGISTRATION=true
 function abort()
 {
     echo >&2 '
@@ -49,8 +50,12 @@ trap 'abort' 0
 echo "Starting to pave Azure for TKGI installation"
 
 if [ -f "$TERRAFORM_INPUT_FILE" ]; then
-  get_jq
-	get_terrform
+  if ! [ -x jq ]; then
+    get_jq
+  fi
+  if ! [ -x terraform ]; then
+    get_terrform
+  fi	
   $CWD/terraform init
   $CWD/terraform plan -out=tanzu.tfplan
   $CWD/terraform apply tanzu.tfplan

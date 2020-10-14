@@ -166,9 +166,19 @@ variable "pcf_infrastructure_subnet" {
   default = "10.0.5.0/24"
 }
 
+variable "pcf_infrastructure_subnet_reserved_ip_range" {
+  type    = string
+  default = "10.0.5.0-10.0.5.25"
+}
+
 variable "pcf_services_subnet" {
   type    = string
   default = "10.0.4.0/24"
+}
+
+variable "pcf_services_subnet_reserved_ip_range" {
+  type    = string
+  default = "10.0.4.0-10.0.4.10"
 }
 
 variable "azure_master_managed_identity" {

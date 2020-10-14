@@ -10,6 +10,7 @@ TERRAFORM_OUTPUT_FILE=$CWD/azure-tanzu-automation/terraform-output.json
 TERRAFORM_INPUT_FILE=$CWD/tanzu.tfplan # https://github.com/pivotal/paving-pks.git
 OS=$(uname)
 export PATH=.:$PATH
+export ARM_SKIP_PROVIDER_REGISTRATION=true
 function abort()
 {
     echo >&2 '
@@ -36,12 +37,11 @@ trap 'abort' 0
 echo "Staring to unpave Azure tanzu installation"
 
 if [ -f "$TERRAFORM_INPUT_FILE" ]; then
-	get_terrform
-#  cd azure-tanzu-automation
-#  ./delete-pks.sh
-#  cd ..
+  if ! [ -x terraform ]; then
+    get_terrform
+  fi
   $CWD/terraform destroy -auto-approve
-  rm -rf $CWD/tanzu.tfplan $CWD/jq $CWD/terraform.zip $CWD/terraform $CWD/terraform.tfstate $CWD/terraform.tfstate.backup $CWD/.terraform
+  rm -rf $TERRAFORM_OUTPUT_FILE $CWD/tanzu.tfplan $CWD/jq $CWD/terraform.zip $CWD/terraform $CWD/terraform.tfstate $CWD/terraform.tfstate.backup $CWD/.terraform $CWD/opsman.pem
 fi
 trap : 0
 

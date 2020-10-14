@@ -96,6 +96,10 @@ output "infrastructure_subnet_gateway" {
   value = module.infra.infrastructure_subnet_gateway
 }
 
+output "infrastructure_subnet_reserved_ip_range" {
+  value = var.pcf_infrastructure_subnet_reserved_ip_range
+}
+
 output "services_subnet_name" {
   value = module.pas.services_subnet_name
 }
@@ -106,6 +110,10 @@ output "services_subnet_cidr" {
 
 output "services_subnet_gateway" {
   value = module.pas.services_subnet_gateway
+}
+
+output "services_subnet_reserved_ip_range" {
+  value = var.pcf_services_subnet_reserved_ip_range
 }
 
 output "pcf_resource_group_name" {
@@ -167,20 +175,13 @@ output "ops_manager_public_ip" {
   value = module.ops_manager.ops_manager_public_ip
 }
 
-output "ops_manager_ip" {
-  value = module.ops_manager.ops_manager_public_ip
-}
-
 output "ops_manager_private_ip" {
   value = module.ops_manager.ops_manager_private_ip
 }
 
-output "pks-master-app-sec-group" {
-  value = module.pks.pks-master-app-sec-group
-}
 output "master_managed_identity" {
-  value = "${azurerm_user_assigned_identity.pks_master_identity.name}"
+  value = var.azure_master_managed_identity
 }
 output "worker_managed_identity" {
-  value = "${azurerm_user_assigned_identity.pks_worker_identity.name}"
+  value = var.azure_worker_managed_identity
 }
