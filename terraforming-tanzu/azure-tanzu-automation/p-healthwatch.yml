@@ -22,3 +22,5 @@ network-properties:
 errand-config:
   smoke-tests:
     post-deploy-state: false
+  cleanup:
+    pre-delete-state: false

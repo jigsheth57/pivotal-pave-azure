@@ -41,30 +41,34 @@ product-properties:
     value: true
   .properties.autoscale_enable_notifications:
     value: false
+  # .properties.uaa:
+  #   value: ldap
+  # .properties.uaa.ldap.credentials:
+  #   value:
+  #     identity: ((uaa-ldap-credentials-identity))
+  #     password: ((uaa-ldap-credentials-password))
+  # .properties.uaa.ldap.first_name_attribute:
+  #   value: ((uaa-ldap-first-name-attribute))
+  # .properties.uaa.ldap.group_search_base:
+  #   value: ((uaa-ldap-group-search-base))
+  # .properties.uaa.ldap.group_search_filter:
+  #   value: ((uaa-ldap-group-search-filter))
+  # .properties.uaa.ldap.last_name_attribute:
+  #   value: ((uaa-ldap-last-name-attribute))
+  # .properties.uaa.ldap.ldap_referrals:
+  #   value: follow
+  # .properties.uaa.ldap.mail_attribute_name:
+  #   value: mail
+  # .properties.uaa.ldap.search_base:
+  #   value: ((uaa-ldap-user-search-base))
+  # .properties.uaa.ldap.search_filter:
+  #   value: ((uaa-ldap-user-search-filter))
+  # .properties.uaa.ldap.url:
+  #   value: ((uaa-ldap-url))
+
   .properties.uaa:
-    value: ldap
-  .properties.uaa.ldap.credentials:
-    value:
-      identity: ((uaa-ldap-credentials-identity))
-      password: ((uaa-ldap-credentials-password))
-  .properties.uaa.ldap.first_name_attribute:
-    value: ((uaa-ldap-first-name-attribute))
-  .properties.uaa.ldap.group_search_base:
-    value: ((uaa-ldap-group-search-base))
-  .properties.uaa.ldap.group_search_filter:
-    value: ((uaa-ldap-group-search-filter))
-  .properties.uaa.ldap.last_name_attribute:
-    value: ((uaa-ldap-last-name-attribute))
-  .properties.uaa.ldap.ldap_referrals:
-    value: follow
-  .properties.uaa.ldap.mail_attribute_name:
-    value: mail
-  .properties.uaa.ldap.search_base:
-    value: ((uaa-ldap-user-search-base))
-  .properties.uaa.ldap.search_filter:
-    value: ((uaa-ldap-user-search-filter))
-  .properties.uaa.ldap.url:
-    value: ((uaa-ldap-url))
+    value: internal
+
   .properties.enable_smb_volume_driver:
     value: false
   .properties.system_blobstore:
@@ -102,6 +106,8 @@ resource-config:
   backup_restore:
     instances: 0
 errand-config:
+  smoke_tests:
+    post-deploy-state: false
   test-autoscaling:
     post-deploy-state: false
   smbbrokerpush:

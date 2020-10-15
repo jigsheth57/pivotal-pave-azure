@@ -5,23 +5,23 @@ output "dns_name" {
 }
 
 output "ops_manager_private_ip" {
-  value = "${var.ops_manager_private_ip}"
+  value = var.ops_manager_private_ip
 }
 
 output "ops_manager_public_ip" {
-  value = "${azurerm_public_ip.ops_manager_public_ip.ip_address}"
+  value = azurerm_public_ip.ops_manager_public_ip.ip_address
 }
 
 output "ops_manager_ssh_public_key" {
   sensitive = true
-  value     = "${tls_private_key.ops_manager.public_key_openssh}"
+  value     = tls_private_key.ops_manager.public_key_openssh
 }
 
 output "ops_manager_ssh_private_key" {
   sensitive = true
-  value     = "${tls_private_key.ops_manager.private_key_pem}"
+  value     = tls_private_key.ops_manager.private_key_pem
 }
 
 output "ops_manager_storage_account" {
-  value = "${azurerm_storage_account.ops_manager_storage_account.name}"
+  value = azurerm_storage_account.ops_manager_storage_account.name
 }

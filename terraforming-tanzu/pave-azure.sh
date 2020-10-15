@@ -55,7 +55,7 @@ if [ -f "$TERRAFORM_INPUT_FILE" ]; then
   fi
   if ! [ -x terraform ]; then
     get_terrform
-  fi	
+  fi
   $CWD/terraform init
   $CWD/terraform plan -out=tanzu.tfplan
   $CWD/terraform apply tanzu.tfplan
@@ -66,13 +66,13 @@ if [ -f "$TERRAFORM_INPUT_FILE" ]; then
   # read -p "Will continue in 2 minutes, please update your public DNS server ($DOMAIN_ZONE) with above NS records...." -t 120
   # echo "Will continue in 2 minutes ...."
   # sleep 120
-  $CWD/jq -r '.ops_manager_ssh_private_key.value' $TERRAFORM_OUTPUT_FILE >$OPSMAN_CERT
+  if ! [ -f "$OPSMAN_CERT" ]; then
+    $CWD/jq -r '.ops_manager_ssh_private_key.value' $TERRAFORM_OUTPUT_FILE >$OPSMAN_CERT
+  fi
   if [ -f "$OPSMAN_CERT" ]; then
     chmod 400 $OPSMAN_CERT
   fi
   echo "Once DNS is configured, run following command: 'cd azure-tanzu-automation && ./install-tanzu.sh'"
-  # cd azure-tanzu-automation
-  # ./install-tanzu.sh
 fi
 trap : 0
 

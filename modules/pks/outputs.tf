@@ -1,5 +1,5 @@
 output "pks_lb_name" {
-  value = "${azurerm_lb.pks-lb.name}"
+  value = azurerm_lb.pks-lb.name
 }
 
 output "pks_api_hostname" {
@@ -7,7 +7,7 @@ output "pks_api_hostname" {
 }
 
 output "harbor_lb_name" {
-  value = "${azurerm_lb.harbor-lb.name}"
+  value = azurerm_lb.harbor-lb.name
 }
 
 output "harbor_hostname" {

@@ -15,7 +15,7 @@ product-properties:
   .properties.cloud_provider.azure.azure_worker_managed_identity:
     value: ((worker-managed-identity))
   .properties.cloud_provider.azure.default_security_group:
-    value: ((pcf-resource-group-name))-bosh-deployed-vms-security-group
+    value: ((pcf-resource-group-name))-services-subnet-security-group
   .properties.cloud_provider.azure.location:
     value: ((location))
   .properties.cloud_provider.azure.primary_availability_set:
@@ -33,6 +33,8 @@ product-properties:
   .properties.log_sink_resources_deploy:
     value: true
   .properties.metric_sink_resources_deploy:
+    value: true
+  .properties.node_exporter_deploy:
     value: true
   .properties.pks_api_hostname:
     value: ((pks-api-hostname))
@@ -55,40 +57,39 @@ product-properties:
   .properties.plan2_selector.active.kubelet_drain_force_node:
     value: true
 
+  # .properties.uaa:
+  #   value: ldap
+  # .properties.uaa.ldap.credentials:
+  #   value:
+  #     identity: ((uaa-ldap-credentials-identity))
+  #     password: ((uaa-ldap-credentials-password))
+  # .properties.uaa.ldap.external_groups_whitelist:
+  #   value: '*'
+  # .properties.uaa.ldap.first_name_attribute:
+  #   value: ((uaa-ldap-first-name-attribute))
+  # .properties.uaa.ldap.group_search_base:
+  #   value: ((uaa-ldap-group-search-base))
+  # .properties.uaa.ldap.group_search_filter:
+  #   value: ((uaa-ldap-group-search-filter))
+  # .properties.uaa.ldap.last_name_attribute:
+  #   value: ((uaa-ldap-last-name-attribute))
+  # .properties.uaa.ldap.ldap_referrals:
+  #   value: follow
+  # .properties.uaa.ldap.mail_attribute_name:
+  #   value: mail
+  # .properties.uaa.ldap.search_base:
+  #   value: ((uaa-ldap-user-search-base))
+  # .properties.uaa.ldap.search_filter:
+  #   value: ((uaa-ldap-user-search-filter))
+  # .properties.uaa.ldap.url:
+  #   value: ((uaa-ldap-url))
+
   .properties.uaa:
-    value: ldap
-  .properties.uaa.ldap.credentials:
-    value:
-      identity: ((uaa-ldap-credentials-identity))
-      password: ((uaa-ldap-credentials-password))
-  .properties.uaa.ldap.external_groups_whitelist:
-    value: '*'
-  .properties.uaa.ldap.first_name_attribute:
-    value: ((uaa-ldap-first-name-attribute))
-  .properties.uaa.ldap.group_search_base:
-    value: ((uaa-ldap-group-search-base))
-  .properties.uaa.ldap.group_search_filter:
-    value: ((uaa-ldap-group-search-filter))
-  .properties.uaa.ldap.last_name_attribute:
-    value: ((uaa-ldap-last-name-attribute))
-  .properties.uaa.ldap.ldap_referrals:
-    value: follow
-  .properties.uaa.ldap.mail_attribute_name:
-    value: mail
-  .properties.uaa.ldap.search_base:
-    value: ((uaa-ldap-user-search-base))
-  .properties.uaa.ldap.search_filter:
-    value: ((uaa-ldap-user-search-filter))
-  .properties.uaa.ldap.url:
-    value: ((uaa-ldap-url))
+    value: internal
+
   .properties.oidc_selector:
     value: enabled
 
-  # .properties.uaa:
-  #   selected_option: internal
-  #   value: internal
-  # .properties.uaa_oidc:
-  #   value: false
   .properties.telemetry_selector:
     value: disabled
   .properties.telemetry_installation_purpose_selector:

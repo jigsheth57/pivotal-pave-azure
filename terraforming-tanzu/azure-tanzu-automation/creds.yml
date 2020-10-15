@@ -5,7 +5,7 @@ registry-admin-password: pivotal
 pivnet-token: XXXX
 uaa-ldap-credentials-identity: uid=ldapadmin,ou=Users,o=XXXX,dc=jumpcloud,dc=com
 uaa-ldap-credentials-password: welcome1
-uaa-ldap-group-search-base: ou=Users,o=XXXX,dc=jumpcloud,dc=com
+uaa-ldap-group-search-base: ou=Users,o=XXXXX,dc=jumpcloud,dc=com
 uaa-ldap-group-search-filter: (&(objectClass=groupOfNames)(member={0}))
 uaa-ldap-user-search-base: ou=Users,o=XXXXX,dc=jumpcloud,dc=com
 uaa-ldap-user-search-filter: (&(objectClass=inetOrgPerson)(uid={0}))

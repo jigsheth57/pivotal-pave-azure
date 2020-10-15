@@ -8,10 +8,10 @@
 # az provider register --namespace Microsoft.Network
 # az provider register --namespace Microsoft.Compute
 
-subscription_id       = "XXXX"
-tenant_id             = "XXXX"
-client_id             = "XXXX"
-client_secret         = "XXXX"
+subscription_id       = "XXXXX"
+tenant_id             = "XXXXX"
+client_id             = "XXXXX"
+client_secret         = "XXXXX"
 
 # Resource Group name is the env_name
 env_name              = "exelondemo"

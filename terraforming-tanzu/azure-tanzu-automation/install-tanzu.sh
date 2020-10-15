@@ -97,6 +97,17 @@ if [ -f "$TERRAFORM_OUTPUT_FILE" ]; then
   ADMIN_USER_SECRET=$(awk -F: '/^om-password/{gsub(/ /,"",$2); print $2}' $CWD/creds.yml)
   echo "registry-admin-password: $ADMIN_USER_SECRET" >>$CWD/terraform-creds.yml
 
+  # interpolate product yaml files with terraform creds and creds yaml files to substitute
+  $CWD/om interpolate -c $CWD/env.yml -l $CWD/creds.yml -l $CWD/terraform-creds.yml -s >$CWD/env-fix.yml
+	$CWD/om interpolate -c $CWD/auth.yml -l $CWD/creds.yml -l $CWD/terraform-creds.yml -s >$CWD/auth-fix.yml
+	$CWD/om interpolate -c $CWD/director.yml -l $CWD/creds.yml -l $CWD/terraform-creds.yml -s >$CWD/director-fix.yml
+
+  until nc -z $OPS_MANAGER 443; do echo waiting for $OPS_MANAGER:443; sleep 2; done;
+  sleep 30;
+
+  # Configure Opsmanager
+	$CWD/om --env $CWD/env-fix.yml configure-authentication --config $CWD/auth-fix.yml
+
   if ! [ -f "$CWD/pks-api.cert" ]; then
     $CWD/om --env $CWD/env-fix.yml generate-certificate -d "$($CWD/jq -r '.pks_api_hostname.value' $TERRAFORM_OUTPUT_FILE)" | $CWD/jq '.certificate,.key' > pks-api.cert
   fi
@@ -116,19 +127,12 @@ if [ -f "$TERRAFORM_OUTPUT_FILE" ]; then
   echo "srt-cert.private_key: "$(tail -n 1 srt.cert) >>$CWD/terraform-creds.yml
 
   # interpolate product yaml files with terraform creds and creds yaml files to substitute
-	$CWD/om interpolate -c $CWD/env.yml -l $CWD/creds.yml -l $CWD/terraform-creds.yml -s >$CWD/env-fix.yml
-	$CWD/om interpolate -c $CWD/auth.yml -l $CWD/creds.yml -l $CWD/terraform-creds.yml -s >$CWD/auth-fix.yml
-	$CWD/om interpolate -c $CWD/director.yml -l $CWD/creds.yml -l $CWD/terraform-creds.yml -s >$CWD/director-fix.yml
   $CWD/om interpolate -c $CWD/srt.yml -l $CWD/creds.yml -l $CWD/terraform-creds.yml -s >$CWD/srt-fix.yml
   $CWD/om interpolate -c $CWD/pks.yml -l $CWD/creds.yml -l $CWD/terraform-creds.yml -s >$CWD/pks-fix.yml
   $CWD/om interpolate -c $CWD/harbor-container-registry.yml -l $CWD/creds.yml -l $CWD/terraform-creds.yml -s >$CWD/harbor-container-registry-fix.yml
 
-  until nc -z $OPS_MANAGER 443; do echo waiting for $OPS_MANAGER:443; sleep 2; done;
-  sleep 30;
-
-  # Configure Opsmanager and Bosh Director
-	$CWD/om --env $CWD/env-fix.yml configure-authentication --config $CWD/auth-fix.yml
-	$CWD/om --env $CWD/env-fix.yml configure-director --config $CWD/director-fix.yml
+  # Configure BOSH Director
+  $CWD/om --env $CWD/env-fix.yml configure-director --config $CWD/director-fix.yml
 	$CWD/om --env $CWD/env-fix.yml apply-changes --skip-deploy-products
 
   # Download & upload tiles to Ops Manager

@@ -1,5 +1,18 @@
 terraform {
   required_version = "~> 0.13.0"
+  required_providers {
+    azurerm = {
+      version = "~> 2.31.0"
+    }
+    tls = {
+      version = "~> 2.2.0"
+      source = "hashicorp/tls"
+    }
+    random = {
+      version = "~> 3.0.0"
+      source = "hashicorp/random"
+    }
+  }
 }
 
 provider "azurerm" {
@@ -9,7 +22,6 @@ provider "azurerm" {
   tenant_id       = var.tenant_id
   environment     = var.cloud_name
 
-  version = "=2.29.0"
   features {}
 }
 
@@ -34,8 +46,6 @@ module "ops_manager" {
   ops_manager_image_uri  = var.ops_manager_image_uri
   ops_manager_vm_size    = var.ops_manager_vm_size
   ops_manager_private_ip = var.ops_manager_private_ip
-
-  optional_ops_manager_image_uri = var.optional_ops_manager_image_uri
 
   resource_group_name = module.infra.resource_group_name
   dns_zone_name       = module.infra.dns_zone_name

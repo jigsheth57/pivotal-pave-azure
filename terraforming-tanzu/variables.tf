@@ -110,10 +110,6 @@ variable "web_lb_private_ip" {
   default     = "10.0.5.17"
 }
 
-variable "optional_ops_manager_image_uri" {
-  default = ""
-}
-
 variable "ops_manager_vm_size" {
   type    = string
   default = "Standard_DS2_v2"
