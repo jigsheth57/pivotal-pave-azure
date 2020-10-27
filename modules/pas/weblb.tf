@@ -1,14 +1,5 @@
-# resource "azurerm_public_ip" "web-lb-ip" {
-#   name                    = "web-lb-ip"
-#   location                = "${var.location}"
-#   resource_group_name     = "${var.resource_group_name}"
-#   allocation_method       = "Static"
-#   sku                     = "Standard"
-#   idle_timeout_in_minutes = 30
-# }
-
 resource "azurerm_lb" "web-lb" {
-  name                = "${var.env_id}-web-lb"
+  name                = "${var.env_name}-web-lb"
   location            = var.location
   sku                 = "Standard"
   resource_group_name = var.resource_group_name
@@ -18,18 +9,17 @@ resource "azurerm_lb" "web-lb" {
     subnet_id                     = var.infra_subnet_id
     private_ip_address_allocation = "static"
     private_ip_address            = var.web_lb_private_ip
-#    public_ip_address_id = azurerm_public_ip.web-lb-ip.id
   }
 }
 
 resource "azurerm_lb_backend_address_pool" "web-backend-pool" {
-  name                = "${var.env_id}-web-backend-pool"
+  name                = "${var.env_name}-web-backend-pool"
   resource_group_name = var.resource_group_name
   loadbalancer_id     = azurerm_lb.web-lb.id
 }
 
 resource "azurerm_lb_probe" "web-https-probe" {
-  name                = "${var.env_id}-web-https-probe"
+  name                = "${var.env_name}-web-https-probe"
   resource_group_name = var.resource_group_name
   loadbalancer_id     = azurerm_lb.web-lb.id
   protocol            = "TCP"
@@ -37,7 +27,7 @@ resource "azurerm_lb_probe" "web-https-probe" {
 }
 
 resource "azurerm_lb_rule" "web-https-rule" {
-  name                = "${var.env_id}-web-https-rule"
+  name                = "${var.env_name}-web-https-rule"
   resource_group_name = var.resource_group_name
   loadbalancer_id     = azurerm_lb.web-lb.id
 
@@ -52,7 +42,7 @@ resource "azurerm_lb_rule" "web-https-rule" {
 }
 
 resource "azurerm_lb_probe" "web-http-probe" {
-  name                = "${var.env_id}-web-http-probe"
+  name                = "${var.env_name}-web-http-probe"
   resource_group_name = var.resource_group_name
   loadbalancer_id     = azurerm_lb.web-lb.id
   protocol            = "TCP"
@@ -60,7 +50,7 @@ resource "azurerm_lb_probe" "web-http-probe" {
 }
 
 resource "azurerm_lb_rule" "web-http-rule" {
-  name                = "${var.env_id}-web-http-rule"
+  name                = "${var.env_name}-web-http-rule"
   resource_group_name = var.resource_group_name
   loadbalancer_id     = azurerm_lb.web-lb.id
 
@@ -75,7 +65,7 @@ resource "azurerm_lb_rule" "web-http-rule" {
 }
 
 resource "azurerm_lb_rule" "web-ntp" {
-  name                = "${var.env_id}-web-ntp-rule"
+  name                = "${var.env_name}-web-ntp-rule"
   resource_group_name = var.resource_group_name
   loadbalancer_id     = azurerm_lb.web-lb.id
 

@@ -1,14 +1,5 @@
-# resource "azurerm_public_ip" "harbor-lb-ip" {
-#   name                    = "harbor-lb-ip"
-#   location                = "${var.location}"
-#   resource_group_name     = "${var.resource_group_name}"
-#   allocation_method       = "Static"
-#   sku                     = "Standard"
-#   idle_timeout_in_minutes = 30
-# }
-
 resource "azurerm_lb" "harbor-lb" {
-  name                = "${var.env_id}-harbor-lb"
+  name                = "${var.env_name}-harbor-lb"
   location            = var.location
   sku                 = "Standard"
   resource_group_name = var.resource_group_name
@@ -22,13 +13,13 @@ resource "azurerm_lb" "harbor-lb" {
 }
 
 resource "azurerm_lb_backend_address_pool" "harbor-backend-pool" {
-  name                = "${var.env_id}-harbor-backend-pool"
+  name                = "${var.env_name}-harbor-backend-pool"
   resource_group_name = var.resource_group_name
   loadbalancer_id     = azurerm_lb.harbor-lb.id
 }
 
 resource "azurerm_lb_probe" "harbor-https-probe" {
-  name                = "${var.env_id}-harbor-https-probe"
+  name                = "${var.env_name}-harbor-https-probe"
   resource_group_name = var.resource_group_name
   loadbalancer_id     = azurerm_lb.harbor-lb.id
   protocol            = "TCP"
@@ -36,7 +27,7 @@ resource "azurerm_lb_probe" "harbor-https-probe" {
 }
 
 resource "azurerm_lb_rule" "harbor-https-rule" {
-  name                = "${var.env_id}-harbor-https-rule"
+  name                = "${var.env_name}-harbor-https-rule"
   resource_group_name = var.resource_group_name
   loadbalancer_id     = azurerm_lb.harbor-lb.id
 
@@ -51,7 +42,7 @@ resource "azurerm_lb_rule" "harbor-https-rule" {
 }
 
 resource "azurerm_lb_probe" "harbor-http-probe" {
-  name                = "${var.env_id}-harbor-http-probe"
+  name                = "${var.env_name}-harbor-http-probe"
   resource_group_name = var.resource_group_name
   loadbalancer_id     = azurerm_lb.harbor-lb.id
   protocol            = "TCP"
@@ -59,7 +50,7 @@ resource "azurerm_lb_probe" "harbor-http-probe" {
 }
 
 resource "azurerm_lb_rule" "harbor-http-rule" {
-  name                = "${var.env_id}-harbor-http-rule"
+  name                = "${var.env_name}-harbor-http-rule"
   resource_group_name = var.resource_group_name
   loadbalancer_id     = azurerm_lb.harbor-lb.id
 
@@ -74,7 +65,7 @@ resource "azurerm_lb_rule" "harbor-http-rule" {
 }
 
 resource "azurerm_lb_rule" "harbor-ntp" {
-  name                = "${var.env_id}-harbor-ntp-rule"
+  name                = "${var.env_name}-harbor-ntp-rule"
   resource_group_name = var.resource_group_name
   loadbalancer_id     = azurerm_lb.harbor-lb.id
 

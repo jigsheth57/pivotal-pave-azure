@@ -25,16 +25,21 @@ provider "azurerm" {
   features {}
 }
 
+
+
 module "infra" {
   source = "../modules/infra"
 
-  env_name                          = var.env_name
-  location                          = var.location
-  dns_subdomain                     = var.dns_subdomain
-  dns_suffix                        = var.dns_suffix
-  pcf_infrastructure_subnet         = var.pcf_infrastructure_subnet
-  pcf_virtual_network_address_space = var.pcf_virtual_network_address_space
-  # virtual_network                   = var.virtual_network
+  env_name                              = var.env_name
+  location                              = var.location
+  dns_subdomain                         = var.dns_subdomain
+  dns_suffix                            = var.dns_suffix
+  network_resource_group                = var.network_resource_group
+  virtual_network                       = var.virtual_network
+  infrastructure_subnet                 = var.infrastructure_subnet
+  services_subnet                       = var.services_subnet
+  infrastructure_subnet_security_group  = var.infrastructure_subnet_security_group
+  services_subnet_security_group        = var.services_subnet_security_group
 }
 
 module "ops_manager" {
@@ -49,32 +54,27 @@ module "ops_manager" {
 
   resource_group_name = module.infra.resource_group_name
   dns_zone_name       = module.infra.dns_zone_name
-  security_group_id   = module.infra.security_group_id
+  security_group_id   = module.infra.infrastructure_subnet_security_group_id
   subnet_id           = module.infra.infrastructure_subnet_id
 }
 
 module "pas" {
   source = "../modules/pas"
 
-  env_id   = var.env_name
-  env_name = var.env_name
-  location = var.location
+  env_name                              = var.env_name
+  location                              = var.location
 
-  services_subnet_cidr = var.pcf_services_subnet
+  cf_storage_account_name               = var.cf_storage_account_name
+  cf_buildpacks_storage_container_name  = var.cf_buildpacks_storage_container_name
+  cf_droplets_storage_container_name    = var.cf_droplets_storage_container_name
+  cf_packages_storage_container_name    = var.cf_packages_storage_container_name
+  cf_resources_storage_container_name   = var.cf_resources_storage_container_name
+  ssh_lb_private_ip                     = var.ssh_lb_private_ip
+  web_lb_private_ip                     = var.web_lb_private_ip
 
-  cf_storage_account_name              = var.cf_storage_account_name
-  cf_buildpacks_storage_container_name = var.cf_buildpacks_storage_container_name
-  cf_droplets_storage_container_name   = var.cf_droplets_storage_container_name
-  cf_packages_storage_container_name   = var.cf_packages_storage_container_name
-  cf_resources_storage_container_name  = var.cf_resources_storage_container_name
-  ssh_lb_private_ip = var.ssh_lb_private_ip
-  web_lb_private_ip = var.web_lb_private_ip
-
-  resource_group_name                 = module.infra.resource_group_name
-  dns_zone_name                       = module.infra.dns_zone_name
-  network_name                        = module.infra.network_name
-  bosh_deployed_vms_security_group_id = module.infra.bosh_deployed_vms_security_group_id
-  infra_subnet_id = module.infra.infrastructure_subnet_id
+  resource_group_name                   = module.infra.resource_group_name
+  dns_zone_name                         = module.infra.dns_zone_name
+  infra_subnet_id                       = module.infra.infrastructure_subnet_id
 }
 
 module "certs" {
@@ -89,31 +89,12 @@ module "certs" {
 module "pks" {
   source = "../modules/pks"
 
-  env_id   = var.env_name
-  location = var.location
-  services_subnet_cidr = var.pcf_services_subnet
-  infrastructure_subnet_cidr = var.pcf_infrastructure_subnet
-  harbor_lb_private_ip = var.harbor_lb_private_ip
-  pks_lb_private_ip = var.pks_lb_private_ip
+  env_name                = var.env_name
+  location                = var.location
+  harbor_lb_private_ip    = var.harbor_lb_private_ip
+  pks_lb_private_ip       = var.pks_lb_private_ip
 
-  resource_group_cidr = var.pcf_virtual_network_address_space[0]
-
-  resource_group_name                 = module.infra.resource_group_name
-  dns_zone_name                       = module.infra.dns_zone_name
-  network_name                        = module.infra.network_name
-  bosh_deployed_vms_security_group_id = module.infra.bosh_deployed_vms_security_group_id
-  infra_subnet_id = module.infra.infrastructure_subnet_id
-}
-
-data "azurerm_subscription" "primary" {
-}
-
-data "azurerm_resource_group" "primary" {
-  name     = "${var.env_name}"
-}
-
-resource "azurerm_availability_set" "pks" {
-  name                = "${var.env_name}-availability-set"
-  location            = var.location
-  resource_group_name = module.infra.resource_group_name
+  resource_group_name     = module.infra.resource_group_name
+  dns_zone_name           = module.infra.dns_zone_name
+  infra_subnet_id         = module.infra.infrastructure_subnet_id
 }

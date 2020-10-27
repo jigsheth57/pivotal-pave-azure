@@ -1,13 +1,5 @@
-# resource "azurerm_public_ip" "pks-lb-ip" {
-#   name                = "${var.env_id}-pks-lb-ip"
-#   location            = "${var.location}"
-#   resource_group_name = "${var.resource_group_name}"
-#   allocation_method   = "Static"
-#   sku                 = "Standard"
-# }
-
 resource "azurerm_lb" "pks-lb" {
-  name                = "${var.env_id}-pks-lb"
+  name                = "${var.env_name}-pks-lb"
   location            = var.location
   sku                 = "Standard"
   resource_group_name = var.resource_group_name
@@ -17,18 +9,17 @@ resource "azurerm_lb" "pks-lb" {
     subnet_id                     = var.infra_subnet_id
     private_ip_address_allocation = "static"
     private_ip_address            = var.pks_lb_private_ip
-#    public_ip_address_id = azurerm_public_ip.pks-lb-ip.id
   }
 }
 
 resource "azurerm_lb_backend_address_pool" "pks-lb-backend-pool" {
-  name                = "${var.env_id}-pks-backend-pool"
+  name                = "${var.env_name}-pks-backend-pool"
   resource_group_name = var.resource_group_name
   loadbalancer_id     = azurerm_lb.pks-lb.id
 }
 
 resource "azurerm_lb_probe" "pks-lb-uaa-health-probe" {
-  name                = "${var.env_id}-pks-lb-uaa-health-probe"
+  name                = "${var.env_name}-pks-lb-uaa-health-probe"
   resource_group_name = var.resource_group_name
   loadbalancer_id     = azurerm_lb.pks-lb.id
   protocol            = "Tcp"
@@ -38,7 +29,7 @@ resource "azurerm_lb_probe" "pks-lb-uaa-health-probe" {
 }
 
 resource "azurerm_lb_rule" "pks-lb-uaa-rule" {
-  name                           = "${var.env_id}-pks-lb-uaa-rule"
+  name                           = "${var.env_name}-pks-lb-uaa-rule"
   resource_group_name            = var.resource_group_name
   loadbalancer_id                = azurerm_lb.pks-lb.id
   protocol                       = "Tcp"
@@ -50,7 +41,7 @@ resource "azurerm_lb_rule" "pks-lb-uaa-rule" {
 }
 
 resource "azurerm_lb_probe" "pks-lb-api-health-probe" {
-  name                = "${var.env_id}-pks-lb-api-health-probe"
+  name                = "${var.env_name}-pks-lb-api-health-probe"
   resource_group_name = var.resource_group_name
   loadbalancer_id     = azurerm_lb.pks-lb.id
   protocol            = "Tcp"
@@ -60,7 +51,7 @@ resource "azurerm_lb_probe" "pks-lb-api-health-probe" {
 }
 
 resource "azurerm_lb_rule" "pks-lb-api-rule" {
-  name                           = "${var.env_id}-pks-lb-api-rule"
+  name                           = "${var.env_name}-pks-lb-api-rule"
   resource_group_name            = var.resource_group_name
   loadbalancer_id                = azurerm_lb.pks-lb.id
   protocol                       = "Tcp"

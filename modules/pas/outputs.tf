@@ -14,20 +14,6 @@ output "diego_ssh_lb_name" {
   value = azurerm_lb.ssh-lb.name
 }
 
-# Subnets
-
-output "services_subnet_name" {
-  value = azurerm_subnet.services_subnet.name
-}
-
-output "services_subnet_cidr" {
-  value = azurerm_subnet.services_subnet.address_prefix
-}
-
-output "services_subnet_gateway" {
-  value = cidrhost(azurerm_subnet.services_subnet.address_prefix, 1)
-}
-
 # Storage
 
 output "cf_storage_account_name" {

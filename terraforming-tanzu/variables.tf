@@ -1,9 +1,83 @@
-variable "env_name" {
+variable "env_name" {}
+variable "subscription_id" {}
+variable "tenant_id" {}
+variable "client_id" {}
+variable "client_secret" {}
+variable "location" {}
+variable "azure_master_managed_identity" {
+  description = "Managed Identity used for Kubernetes Master Nodes"
+  type    = string
 }
-
+variable "azure_worker_managed_identity" {
+  description = "Managed Identity used for Kubernetes Worker Nodes"
+  type    = string
+}
+variable "dns_suffix" {}
+variable "dns_subdomain" {
+  type        = string
+  description = "The base subdomain used for PCF. For example, if your dns_subdomain is `cf`, and your dns_suffix is `pivotal.io`, your PCF domain would be `cf.pivotal.io`"
+  default     = ""
+}
 variable "cloud_name" {
   description = "The Azure cloud environment to use. Available values at https://www.terraform.io/docs/providers/azurerm/#environment"
   default     = "public"
+}
+variable "network_resource_group" {}
+variable "virtual_network" {}
+variable "infrastructure_subnet" {}
+variable "services_subnet" {}
+variable "infrastructure_subnet_security_group" {}
+variable "services_subnet_security_group" {}
+
+variable "pcf_infrastructure_subnet_reserved_ip_range" {
+  description = "Reserved IPs in infrastructure subnet"
+  type    = string
+  default = "10.0.5.0-10.0.5.25"
+}
+variable "pcf_services_subnet_reserved_ip_range" {
+  description = "Reserved IPs in services subnet"
+  type    = string
+  default = "10.0.4.0-10.0.4.10"
+}
+
+variable "ops_manager_image_uri" {
+  type        = string
+  description = "Ops Manager image on Azure. Ops Manager VM will be skipped if this is empty"
+}
+
+variable "ops_manager_private_ip" {
+  type        = string
+  description = "IP for the Ops Manager instance in infrastructure subnet"
+  default     = "10.0.5.4"
+}
+
+variable "harbor_lb_private_ip" {
+  type        = string
+  description = "IP for the internal Azure LB instance from infrastructure subnet"
+  default     = "10.0.5.5"
+}
+
+variable "pks_lb_private_ip" {
+  type        = string
+  description = "IP for the internal Azure LB instance from infrastructure subnet"
+  default     = "10.0.5.9"
+}
+
+variable "ssh_lb_private_ip" {
+  type        = string
+  description = "IP for the internal Azure LB instance from infrastructure subnet"
+  default     = "10.0.5.13"
+}
+
+variable "web_lb_private_ip" {
+  type        = string
+  description = "IP for the internal Azure LB instance from infrastructure subnet"
+  default     = "10.0.5.17"
+}
+
+variable "ops_manager_vm_size" {
+  type    = string
+  default = "Standard_DS2_v2"
 }
 
 variable "cf_storage_account_name" {
@@ -36,21 +110,6 @@ variable "cf_resources_storage_container_name" {
   default     = "resources"
 }
 
-variable "subscription_id" {
-}
-
-variable "tenant_id" {
-}
-
-variable "client_id" {
-}
-
-variable "client_secret" {
-}
-
-variable "location" {
-}
-
 variable "ssl_cert" {
   type        = string
   description = "the contents of an SSL certificate which should be passed to the gorouter, optional if `ssl_ca_cert` is provided"
@@ -75,114 +134,19 @@ variable "ssl_ca_private_key" {
   default     = ""
 }
 
-variable "ops_manager_image_uri" {
-  type        = string
-  description = "Ops Manager image on Azure. Ops Manager VM will be skipped if this is empty"
-}
 
-variable "ops_manager_private_ip" {
-  type        = string
-  description = "IP for the Ops Manager instance if not deploying in the default infrastructure subnet"
-  default     = "10.0.5.4"
-}
+# variable "pcf_virtual_network_address_space" {
+#   type    = list(string)
+#   default = ["10.0.4.0/23"]
+# }
 
-variable "harbor_lb_private_ip" {
-  type        = string
-  description = "IP for the Ops Manager instance if not deploying in the default infrastructure subnet"
-  default     = "10.0.5.5"
-}
+# variable "pcf_infrastructure_subnet" {
+#   type    = string
+#   default = "10.0.5.0/24"
+# }
 
-variable "pks_lb_private_ip" {
-  type        = string
-  description = "IP for the Ops Manager instance if not deploying in the default infrastructure subnet"
-  default     = "10.0.5.9"
-}
 
-variable "ssh_lb_private_ip" {
-  type        = string
-  description = "IP for the Ops Manager instance if not deploying in the default infrastructure subnet"
-  default     = "10.0.5.13"
-}
-
-variable "web_lb_private_ip" {
-  type        = string
-  description = "IP for the Ops Manager instance if not deploying in the default infrastructure subnet"
-  default     = "10.0.5.17"
-}
-
-variable "ops_manager_vm_size" {
-  type    = string
-  default = "Standard_DS2_v2"
-}
-
-variable "dns_suffix" {
-}
-
-variable "dns_subdomain" {
-  type        = string
-  description = "The base subdomain used for PCF. For example, if your dns_subdomain is `cf`, and your dns_suffix is `pivotal.io`, your PCF domain would be `cf.pivotal.io`"
-  default     = ""
-}
-
-variable "isolation_segment" {
-  default = false
-}
-
-variable "iso_seg_ssl_cert" {
-  type        = string
-  description = "the contents of an SSL certificate which should be passed to the iso seg gorouter, optional if `iso_seg_ssl_ca_cert` is provided"
-  default     = ""
-}
-
-variable "iso_seg_ssl_private_key" {
-  type        = string
-  description = "the contents of an SSL private key which should be passed to the iso seg gorouter, optional if `iso_seg_ssl_ca_cert` is provided"
-  default     = ""
-}
-
-variable "iso_seg_ssl_ca_cert" {
-  type        = string
-  description = "the contents of a CA public key to be used to sign a generated certificate for iso seg gorouter, optional if `iso_seg_ssl_cert` is provided"
-  default     = ""
-}
-
-variable "iso_seg_ssl_ca_private_key" {
-  type        = string
-  description = "the contents of a CA private key to be used to sign a generated certificate for iso seg gorouter, optional if `iso_seg_ssl_cert` is provided"
-  default     = ""
-}
-
-variable "pcf_virtual_network_address_space" {
-  type    = list(string)
-  default = ["10.0.4.0/23"]
-}
-
-variable "pcf_infrastructure_subnet" {
-  type    = string
-  default = "10.0.5.0/24"
-}
-
-variable "pcf_infrastructure_subnet_reserved_ip_range" {
-  type    = string
-  default = "10.0.5.0-10.0.5.25"
-}
-
-variable "pcf_services_subnet" {
-  type    = string
-  default = "10.0.4.0/24"
-}
-
-variable "pcf_services_subnet_reserved_ip_range" {
-  type    = string
-  default = "10.0.4.0-10.0.4.10"
-}
-
-variable "azure_master_managed_identity" {
-  type    = string
-  default = "pks-master"
-}
-
-variable "azure_worker_managed_identity" {
-  type    = string
-  default = "pks-worker"
-}
+# variable "pcf_services_subnet" {
+#   type    = string
+#   default = "10.0.4.0/24"
+# }

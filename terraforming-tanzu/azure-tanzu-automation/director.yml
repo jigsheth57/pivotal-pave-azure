@@ -4,7 +4,7 @@ iaas-configurations:
   client_id: ((azure-client-id))
   client_secret: ((azure-client-secret))
   cloud_storage_type: managed_disks
-  default_security_group: ((pcf-resource-group-name))-services-subnet-security-group
+  default_security_group: ((default-security-group))
   deployed_cloud_storage_type: managed_disks
   environment: AzureCloud
   name: default
@@ -25,7 +25,7 @@ networks-configuration:
   networks:
   - name: infrastructure
     subnets:
-    - iaas_identifier: ((pcf-resource-group-name))-virtual-network/((pcf-resource-group-name))-infrastructure-subnet
+    - iaas_identifier: ((network-resource-group-name))/((network-name))/((infrastructure-subnet-name))
       cidr: ((infrastructure-subnet-cidr))
       dns: 168.63.129.16
       gateway: ((infrastructure-subnet-gateway))
@@ -36,7 +36,7 @@ networks-configuration:
       - zone-3
   - name: services
     subnets:
-    - iaas_identifier: ((pcf-resource-group-name))-virtual-network/((pcf-resource-group-name))-services-subnet
+    - iaas_identifier: ((network-resource-group-name))/((network-name))/((services-subnet-name))
       cidr: ((services-subnet-cidr))
       dns: 168.63.129.16
       gateway: ((services-subnet-gateway))
