@@ -10,7 +10,5 @@
 **/.terraform
 **/jq
 **/terraform
-**/terraform.tfvars
 **/azure-tanzu-automation/terraform-output.json
-**/azure-tanzu-automation/creds.yml
 tanzu-terraforming-azure.tar
