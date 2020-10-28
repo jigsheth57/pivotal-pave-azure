@@ -17,7 +17,7 @@ resource "azurerm_virtual_machine" "ops_manager_vm" {
   depends_on                    = [azurerm_network_interface.ops_manager_nic]
   location                      = var.location
   resource_group_name           = var.resource_group_name
-  network_interface_ids         = [azurerm_network_interface.ops_manager_nic.id]
+  network_interface_ids         = [azurerm_network_interface.ops_manager_nic[count.index].id]
   vm_size                       = var.ops_manager_vm_size
   delete_os_disk_on_termination = "true"
   count                         = local.ops_man_vm
