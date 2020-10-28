@@ -12,31 +12,39 @@ Before beginning you will need a Service Principal with the correct roles which 
 `az provider register --namespace Microsoft.Network`
 `az provider register --namespace Microsoft.Compute`
 
-## Paving Azure Infrastructure Steps (assumes Linux environment)
-1. Update values in terraform.tfvars
+## Prerequisite azure resources
+This scripts expects following resources be provided prior to running script:
+1. Resource Group (Tanzu will reside)
+2. Managed Identities (Kubernetes Master & Worker Managed Identity)
+3. Network Resource Group (vNet Resource Group)
+4. Virtual Network
+5. Infrastructure Subnet
+6. Services Subnet
+
+Note: you can use terraforming-tanzu/prereq/pave-azure.sh to automate above steps. Update the `terraforming-tanzu/prereq/terraform.tfvars` accordingly.
+
+## Paving Azure Infrastructure Steps (assumes Linux environment and Prerequisite steps have been completed)
+1. Update values in terraform.tfvars based on the prerequisite steps
 2. `cd terraforming-tanzu`
 3. `./pave-azure.sh`
 4. Update DNS entries
 5. For Pivnet Token, Ops Manager credentials, Harbor password and LDAP entries (optional) update `azure-tanzu-automation/creds.yml`
 6. Make sure DNS entries are resolvable before continuing
-7. `azure-tanzu-automation/install-tanzu.sh` (see note below)
-8. Review and finalize config in Ops Manager before applying changes.
-9. Create PKS admin user `terraforming-tanzu/azure-tanzu-automation/create-pks-admin-user.sh`
-
-#Note about install-tanzu.sh
-The install will download files from PivNet and then upload them to Ops Manager.  If the machine you're running this on has sufficient bandwidth then continue with the above. Otherwise, you can log into the Ops Manager VM and execute the command there to greatly expedite the process.  To do so execute the following (assumes Linux environment).
+7. Follow section Installing Tanzu Steps (see note below)
 
 ## Installing Tanzu Steps
 1. `tar cvf azure-tanzu-automation.tar azure-tanzu-automation`
-2. `scp -o "StrictHostKeyChecking no" -i opsman.pem azure-tanzu-automation.tar ubuntu@opsman.<Environment Name>.<Your Domain>:~`
-3. `ssh -o "StrictHostKeyChecking no" -i opsman.pem ubuntu@opsman.<Environment Name>.<Your Domain>`
+2. `export OPS_MANAGER=$(./jq -r '.ops_manager_dns.value' azure-tanzu-automation/terraform-output.json)`
+2. `scp -o "StrictHostKeyChecking no" -i opsman.pem azure-tanzu-automation.tar ubuntu@$OPS_MANAGER:~`
+3. `ssh -o "StrictHostKeyChecking no" -i opsman.pem ubuntu@$OPS_MANAGER`
 4. `tar xvf azure-tanzu-automation.tar`
 5. `cd azure-tanzu-automation`
-6. `nohup ./install-tanzu.sh > install-tanzu.out 2>&1 &`
+6. `nohup ./install-tanzu.sh > ../install-tanzu-v1.out 2>&1 &`
+7. `tail -f ../install-tanzu-v1.out`
 
 ## Variables
 
-- env_name: **(required)** An arbitrary unique name for namespacing resources
+- env_name: **(required)** resource group name where tanzu will be installed
 - subscription_id: **(required)** Azure account subscription id
 - tenant_id: **(required)** Azure account tenant id
 - client_id: **(required)** Azure automation account client id
@@ -45,5 +53,9 @@ The install will download files from PivNet and then upload them to Ops Manager.
 - location: **(required)** Azure location to stand up environment in
 - dns_suffix: **(required)** Domain to add subdomain
 - dns_subdomain: **(required)** Subdomain
-- azure_master_managed_identity: **(required)** user managed identity
-- azure_worker_managed_identity: **(required)** user managed identity
+- azure_master_managed_identity: **(required)** user managed identity for k8s master nodes
+- azure_worker_managed_identity: **(required)** user managed identity for k8s worker nodes
+- network_resource_group: **(required)** resource group where virtual network resides
+- virtual_network: **(required)** virtual network name to be used with tanzu
+- infrastructure_subnet: **(required)** subnet where tanzu control plans will be installed
+- services_subnet: **(required)** subnet where tas and k8s will reside.

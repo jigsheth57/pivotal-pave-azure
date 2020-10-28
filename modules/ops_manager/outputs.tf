@@ -8,10 +8,6 @@ output "ops_manager_private_ip" {
   value = var.ops_manager_private_ip
 }
 
-output "ops_manager_public_ip" {
-  value = azurerm_public_ip.ops_manager_public_ip.ip_address
-}
-
 output "ops_manager_ssh_public_key" {
   sensitive = true
   value     = tls_private_key.ops_manager.public_key_openssh

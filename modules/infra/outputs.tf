@@ -31,11 +31,11 @@ output "infrastructure_subnet_gateway" {
 }
 
 output "infrastructure_subnet_security_group_name" {
-  value = data.azurerm_network_security_group.infrastructure_subnet_security_group.name
+  value = azurerm_network_security_group.infrastructure_subnet_security_group.name
 }
 
 output "infrastructure_subnet_security_group_id" {
-  value = data.azurerm_network_security_group.infrastructure_subnet_security_group.id
+  value = azurerm_network_security_group.infrastructure_subnet_security_group.id
 }
 
 output "services_subnet_id" {
@@ -55,11 +55,11 @@ output "services_subnet_gateway" {
 }
 
 output "services_subnet_security_group_name" {
-  value = data.azurerm_network_security_group.services_subnet_security_group.name
+  value = azurerm_network_security_group.services_subnet_security_group.name
 }
 
 output "services_subnet_security_group_id" {
-  value = data.azurerm_network_security_group.services_subnet_security_group.id
+  value = azurerm_network_security_group.services_subnet_security_group.id
 }
 
 output "bosh_root_storage_account" {

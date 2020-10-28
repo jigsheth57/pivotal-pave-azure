@@ -26,15 +26,13 @@ variable "network_resource_group" {}
 variable "virtual_network" {}
 variable "infrastructure_subnet" {}
 variable "services_subnet" {}
-variable "infrastructure_subnet_security_group" {}
-variable "services_subnet_security_group" {}
 
-variable "pcf_infrastructure_subnet_reserved_ip_range" {
+variable "infrastructure_subnet_reserved_ip_range" {
   description = "Reserved IPs in infrastructure subnet"
   type    = string
   default = "10.0.5.0-10.0.5.25"
 }
-variable "pcf_services_subnet_reserved_ip_range" {
+variable "services_subnet_reserved_ip_range" {
   description = "Reserved IPs in services subnet"
   type    = string
   default = "10.0.4.0-10.0.4.10"
@@ -57,7 +55,7 @@ variable "harbor_lb_private_ip" {
   default     = "10.0.5.5"
 }
 
-variable "pks_lb_private_ip" {
+variable "tkgi_lb_private_ip" {
   type        = string
   description = "IP for the internal Azure LB instance from infrastructure subnet"
   default     = "10.0.5.9"
@@ -133,20 +131,3 @@ variable "ssl_ca_private_key" {
   description = "the contents of a CA private key to be used to sign a generated certificate for gorouter, optional if `ssl_cert` is provided"
   default     = ""
 }
-
-
-# variable "pcf_virtual_network_address_space" {
-#   type    = list(string)
-#   default = ["10.0.4.0/23"]
-# }
-
-# variable "pcf_infrastructure_subnet" {
-#   type    = string
-#   default = "10.0.5.0/24"
-# }
-
-
-# variable "pcf_services_subnet" {
-#   type    = string
-#   default = "10.0.4.0/24"
-# }

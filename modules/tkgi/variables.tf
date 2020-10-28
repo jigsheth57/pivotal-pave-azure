@@ -13,4 +13,4 @@ variable "infra_subnet_id" {}
 
 variable "harbor_lb_private_ip" {}
 
-variable "pks_lb_private_ip" {}
+variable "tkgi_lb_private_ip" {}

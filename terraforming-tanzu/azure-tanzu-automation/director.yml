@@ -8,7 +8,7 @@ iaas-configurations:
   deployed_cloud_storage_type: managed_disks
   environment: AzureCloud
   name: default
-  resource_group_name: ((pcf-resource-group-name))
+  resource_group_name: ((tanzu-resource-group-name))
   ssh_private_key: ((azure-ssh-public-key.private_key))
   ssh_public_key: ((azure-ssh-public-key.public_key))
   storage_account_type: Premium_LRS

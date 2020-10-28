@@ -3,8 +3,8 @@ product-name: pivotal-container-service
 product-properties:
   .pivotal-container-service.pks_tls:
     value:
-      cert_pem: ((pksapi-cert.certificate))
-      private_key_pem: ((pksapi-cert.private_key))
+      cert_pem: ((tkgiapi-cert.certificate))
+      private_key_pem: ((tkgiapi-cert.private_key))
   .properties.cloud_provider:
     selected_option: azure
     value: Azure
@@ -15,21 +15,21 @@ product-properties:
   .properties.cloud_provider.azure.azure_worker_managed_identity:
     value: ((worker-managed-identity))
   .properties.cloud_provider.azure.default_security_group:
-    value: ((pcf-resource-group-name))-services-subnet-security-group
+    value: ((default-security-group))
   .properties.cloud_provider.azure.location:
     value: ((location))
   .properties.cloud_provider.azure.primary_availability_set:
-    value: ((pcf-resource-group-name))-availability-set
+    value: ((tkgi-availability-set))
   .properties.cloud_provider.azure.resource_group_name:
-    value: ((pcf-resource-group-name))
+    value: ((tanzu-resource-group-name))
   .properties.cloud_provider.azure.subscription_id:
     value: ((azure-subscription-id))
   .properties.cloud_provider.azure.tenant_id:
     value: ((azure-tenant-id))
   .properties.cloud_provider.azure.vnet_name:
-    value: ((pcf-resource-group-name))-virtual-network
+    value: ((network-name))
   .properties.cloud_provider.azure.vnet_resource_group_name:
-    value: ((pcf-resource-group-name))
+    value: ((network-resource-group-name))
   .properties.log_sink_resources_deploy:
     value: true
   .properties.metric_sink_resources_deploy:
@@ -37,7 +37,7 @@ product-properties:
   .properties.node_exporter_deploy:
     value: true
   .properties.pks_api_hostname:
-    value: ((pks-api-hostname))
+    value: ((tkgi-api-hostname))
   .properties.plan1_selector:
     selected_option: active
     value: Plan Active
@@ -109,7 +109,7 @@ network-properties:
 resource-config:
   pivotal-container-service:
     elb_names:
-    - ((pks-lb-name))
+    - ((tkgi-lb-name))
 errand-config:
   upgrade-all-service-instances:
     post-deploy-state: false

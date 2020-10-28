@@ -4,6 +4,9 @@ variable "tenant_id" {}
 variable "client_id" {}
 variable "client_secret" {}
 variable "location" {}
+variable "virtual_network" {}
+variable "infrastructure_subnet" {}
+variable "services_subnet" {}
 variable "azure_master_managed_identity" {
   description = "Managed Identity used for Kubernetes Master Nodes"
   type    = string
@@ -17,15 +20,20 @@ variable "cloud_name" {
   default     = "public"
 }
 variable "network_resource_group" {}
-variable "pcf_virtual_network_address_space" {
+variable "tanzu_virtual_network_address_space" {
   type    = list(string)
   default = ["10.0.4.0/23"]
 }
-variable "pcf_infrastructure_subnet" {
-  type    = string
-  default = "10.0.5.0/24"
+variable "tanzu_infrastructure_subnet" {
+  type    = list(string)
+  default = ["10.0.5.0/24"]
 }
-variable "pcf_services_subnet" {
-  type    = string
-  default = "10.0.4.0/24"
+variable "tanzu_services_subnet" {
+  type    = list(string)
+  default = ["10.0.4.0/24"]
+}
+variable "jumpbox_private_ip" {
+  type        = string
+  description = "IP for the Jumpbox instance in infrastructure subnet"
+  default     = "10.0.5.21"
 }

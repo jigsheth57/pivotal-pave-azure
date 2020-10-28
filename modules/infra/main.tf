@@ -7,20 +7,20 @@ data "azurerm_resource_group" "network_resource_group" {
 }
 
 data "azurerm_virtual_network" "pcf_virtual_network" {
-  name                = "${var.virtual_network}"
-  resource_group_name = "${data.azurerm_resource_group.network_resource_group.name}"
+  name                = var.virtual_network
+  resource_group_name = data.azurerm_resource_group.network_resource_group.name
 }
 
 data "azurerm_subnet" "infrastructure_subnet" {
-  name                 = "${var.infrastructure_subnet}"
-  virtual_network_name = "${data.azurerm_virtual_network.pcf_virtual_network.name}"
-  resource_group_name  = "${data.azurerm_resource_group.network_resource_group.name}"
+  name                 = var.infrastructure_subnet
+  virtual_network_name = data.azurerm_virtual_network.pcf_virtual_network.name
+  resource_group_name  = data.azurerm_resource_group.network_resource_group.name
 }
 
 data "azurerm_subnet" "services_subnet" {
-  name                 = "${var.services_subnet}"
-  virtual_network_name = "${data.azurerm_virtual_network.pcf_virtual_network.name}"
-  resource_group_name  = "${data.azurerm_resource_group.network_resource_group.name}"
+  name                 = var.services_subnet
+  virtual_network_name = data.azurerm_virtual_network.pcf_virtual_network.name
+  resource_group_name  = data.azurerm_resource_group.network_resource_group.name
 }
 
 # ============== Security Groups ===============

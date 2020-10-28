@@ -3,8 +3,6 @@ variable "location" {}
 variable "network_resource_group" {}
 variable "virtual_network" {}
 variable "infrastructure_subnet" {}
-variable "infrastructure_subnet_security_group" {}
 variable "services_subnet" {}
-variable "services_subnet_security_group" {}
 variable "dns_subdomain" {}
 variable "dns_suffix" {}

@@ -34,9 +34,9 @@ function get_jq()
 function get_om()
 {
 	if [ $OS == "Linux" ]; then
-		OM_FILE="https://github.com/pivotal-cf/om/releases/download/6.4.1/om-linux-6.4.1"
+		OM_FILE="https://github.com/pivotal-cf/om/releases/download/6.5.0/om-linux-6.5.0"
 	elif [ $OS == "Darwin" ]; then
-		OM_FILE="https://github.com/pivotal-cf/om/releases/download/6.4.1/om-darwin-6.4.1"
+		OM_FILE="https://github.com/pivotal-cf/om/releases/download/6.5.0/om-darwin-6.5.0"
 	fi
 	WGET_CMD="wget -q $OM_FILE -O $CWD/om"
 	if `$WGET_CMD`; then
@@ -53,16 +53,16 @@ if [ -f "$TERRAFORM_OUTPUT_FILE" ]; then
   if ! [ -x om ]; then
     get_om
   fi
-  PKS_API_HOSTNAME=$($CWD/jq -r '.pks_api_hostname.value' $TERRAFORM_OUTPUT_FILE)
+  TKGI_API_HOSTNAME=$($CWD/jq -r '.tkgi_api_hostname.value' $TERRAFORM_OUTPUT_FILE)
   UAA_ADMIN_SECRET=$($CWD/om --env $CWD/env-fix.yml credentials --product-name pivotal-container-service --credential-reference .properties.pks_uaa_management_admin_client --format json | $CWD/jq -r '.secret' )
   ADMIN_USER_SECRET=$(awk -F: '/^password/{gsub(/ /,"",$2); print $2}' $CWD/env-fix.yml)
   if ! [ -x "$(command -v uaac)" ]; then
     echo "ERROR: uaac is not installed!"
     echo "... run following commands, once you have uaac installed."
-    echo "uaac target $PKS_API_HOSTNAME:8443 --skip-ssl-validation" >remote-uaac-shell.sh
+    echo "uaac target $TKGI_API_HOSTNAME:8443 --skip-ssl-validation" >remote-uaac-shell.sh
     echo "uaac token client get admin -s $UAA_ADMIN_SECRET" >>remote-uaac-shell.sh
-    echo "uaac user add pksadmin --emails pksadmin@example.com -p $ADMIN_USER_SECRET" >>remote-uaac-shell.sh
-    echo "uaac member add pks.clusters.admin pksadmin" >>remote-uaac-shell.sh
+    echo "uaac user add tkgiadmin --emails tkgiadmin@example.com -p $ADMIN_USER_SECRET" >>remote-uaac-shell.sh
+    echo "uaac member add pks.clusters.admin tkgiadmin" >>remote-uaac-shell.sh
     OPS_MANAGER=$($CWD/jq -r '.ops_manager_dns.value' $TERRAFORM_OUTPUT_FILE)
     ssh-keygen -R $OPS_MANAGER
     ssh-keyscan -p 22 $OPS_MANAGER >opsman.keys
@@ -70,11 +70,11 @@ if [ -f "$TERRAFORM_OUTPUT_FILE" ]; then
     scp -o UserKnownHostsFile=opsman.keys -i opsman.pem remote-uaac-shell.sh ubuntu@$OPS_MANAGER:
     ssh -o UserKnownHostsFile=opsman.keys -i opsman.pem ubuntu@$OPS_MANAGER '~/remote-uaac-shell.sh'
   else
-    uaac target $PKS_API_HOSTNAME:8443 --skip-ssl-validation
+    uaac target $TKGI_API_HOSTNAME:8443 --skip-ssl-validation
     uaac token client get admin -s $UAA_ADMIN_SECRET
-    if [ `uaac user get pksadmin | grep -c 'id:'` -eq 0 ]; then      
-      uaac user add pksadmin --emails pksadmin@example.com -p $ADMIN_USER_SECRET
-      uaac member add pks.clusters.admin pksadmin
+    if [ `uaac user get tkgiadmin | grep -c 'id:'` -eq 0 ]; then
+      uaac user add tkgiadmin --emails tkgiadmin@example.com -p $ADMIN_USER_SECRET
+      uaac member add pks.clusters.admin tkgiadmin
     fi
   fi
 fi

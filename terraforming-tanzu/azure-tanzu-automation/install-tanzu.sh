@@ -34,9 +34,9 @@ function get_jq()
 function get_om()
 {
 	if [ $OS == "Linux" ]; then
-		OM_FILE="https://github.com/pivotal-cf/om/releases/download/6.4.1/om-linux-6.4.1"
+		OM_FILE="https://github.com/pivotal-cf/om/releases/download/6.5.0/om-linux-6.5.0"
 	elif [ $OS == "Darwin" ]; then
-		OM_FILE="https://github.com/pivotal-cf/om/releases/download/6.4.1/om-darwin-6.4.1"
+		OM_FILE="https://github.com/pivotal-cf/om/releases/download/6.5.0/om-darwin-6.5.0"
 	fi
 	WGET_CMD="wget -q $OM_FILE -O $CWD/om"
 	if `$WGET_CMD`; then
@@ -92,7 +92,7 @@ if [ -f "$TERRAFORM_OUTPUT_FILE" ]; then
   OPS_MANAGER=$($CWD/jq -r '.ops_manager_dns.value' $TERRAFORM_OUTPUT_FILE)
 
   # parse terraform ouput file and store it in yaml file for product configurations
-	$CWD/jq -r '"om-target: \(.ops_manager_dns.value)", "azure-bosh-storage-account-name: \(.bosh_root_storage_account.value)", "default-security-group: \(.bosh_deployed_vms_security_group_name.value)", "network-name: \(.network_name.value)", "network-resource-group-name: \(.network_resource_group.value)", "infrastructure-subnet-name: \(.infrastructure_subnet_name.value)", "services-subnet-name: \(.services_subnet_name.value)", "azure-client-id: \(.client_id.value)", "azure-client-secret: \(.client_secret.value)", "azure-subscription-id: \(.subscription_id.value)", "azure-tenant-id: \(.tenant_id.value)", "azure-ssh-public-key.public_key: \(.ops_manager_ssh_public_key.value)", "pks-api-hostname: \(.pks_api_hostname.value)", "pks-lb-name: \(.pks_lb_name.value)", "pcf-resource-group-name: \(.pcf_resource_group_name.value)", "location: \(.location.value)", "infrastructure-subnet-cidr: \(.infrastructure_subnet_cidr.value)", "infrastructure-subnet-gateway: \(.infrastructure_subnet_gateway.value)", "infrastructure-subnet-reserved-ip-range: \(.infrastructure_subnet_reserved_ip_range.value)", "services-subnet-cidr: \(.services_subnet_cidr.value)", "services-subnet-gateway: \(.services_subnet_gateway.value)", "services-subnet-reserved-ip-range: \(.services_subnet_reserved_ip_range.value)", "master-managed-identity: \(.master_managed_identity.value)", "worker-managed-identity: \(.worker_managed_identity.value)", "harbor-hostname: \(.harbor_hostname.value)", "harbor-lb-name: \(.harbor_lb_name.value)", "apps-domain: \(.apps_domain.value)", "sys-domain: \(.sys_domain.value)", "cf-storage-account-name: \(.cf_storage_account_name.value)", "cf-storage-account-access-key: \(.cf_storage_account_access_key.value)", "cf-droplets-storage-container: \(.cf_droplets_storage_container.value)", "cf-packages-storage-container: \(.cf_packages_storage_container.value)", "cf-resources-storage-container: \(.cf_resources_storage_container.value)", "cf-buildpacks-storage-container: \(.cf_buildpacks_storage_container.value)", "infrastructure-subnet-name: \(.infrastructure_subnet_name.value)", "services-subnet-name: \(.services_subnet_name.value)", "web-lb-name: \(.web_lb_name.value)", "diego-ssh-lb-name: \(.diego_ssh_lb_name.value)"' $TERRAFORM_OUTPUT_FILE >$CWD/terraform-creds.yml
+	$CWD/jq -r '"om-target: \(.ops_manager_dns.value)", "azure-bosh-storage-account-name: \(.bosh_root_storage_account.value)", "default-security-group: \(.bosh_deployed_vms_security_group_name.value)", "network-name: \(.network_name.value)", "network-resource-group-name: \(.network_resource_group.value)", "infrastructure-subnet-name: \(.infrastructure_subnet_name.value)", "services-subnet-name: \(.services_subnet_name.value)", "azure-client-id: \(.client_id.value)", "azure-client-secret: \(.client_secret.value)", "azure-subscription-id: \(.subscription_id.value)", "azure-tenant-id: \(.tenant_id.value)", "azure-ssh-public-key.public_key: \(.ops_manager_ssh_public_key.value)", "tkgi-api-hostname: \(.tkgi_api_hostname.value)", "tkgi-lb-name: \(.tkgi_lb_name.value)", "tanzu-resource-group-name: \(.tanzu_resource_group_name.value)", "tkgi-availability-set: \(.tkgi_availability_set.value)", "location: \(.location.value)", "infrastructure-subnet-cidr: \(.infrastructure_subnet_cidr.value)", "infrastructure-subnet-gateway: \(.infrastructure_subnet_gateway.value)", "infrastructure-subnet-reserved-ip-range: \(.infrastructure_subnet_reserved_ip_range.value)", "services-subnet-cidr: \(.services_subnet_cidr.value)", "services-subnet-gateway: \(.services_subnet_gateway.value)", "services-subnet-reserved-ip-range: \(.services_subnet_reserved_ip_range.value)", "master-managed-identity: \(.master_managed_identity.value)", "worker-managed-identity: \(.worker_managed_identity.value)", "harbor-hostname: \(.harbor_hostname.value)", "harbor-lb-name: \(.harbor_lb_name.value)", "apps-domain: \(.apps_domain.value)", "sys-domain: \(.sys_domain.value)", "cf-storage-account-name: \(.cf_storage_account_name.value)", "cf-storage-account-access-key: \(.cf_storage_account_access_key.value)", "cf-droplets-storage-container: \(.cf_droplets_storage_container.value)", "cf-packages-storage-container: \(.cf_packages_storage_container.value)", "cf-resources-storage-container: \(.cf_resources_storage_container.value)", "cf-buildpacks-storage-container: \(.cf_buildpacks_storage_container.value)", "infrastructure-subnet-name: \(.infrastructure_subnet_name.value)", "services-subnet-name: \(.services_subnet_name.value)", "web-lb-name: \(.web_lb_name.value)", "diego-ssh-lb-name: \(.diego_ssh_lb_name.value)"' $TERRAFORM_OUTPUT_FILE >$CWD/terraform-creds.yml
 	echo "azure-ssh-public-key.private_key: $($CWD/jq '.ops_manager_ssh_private_key.value' $TERRAFORM_OUTPUT_FILE)" >>$CWD/terraform-creds.yml
   ADMIN_USER_SECRET=$(awk -F: '/^om-password/{gsub(/ /,"",$2); print $2}' $CWD/creds.yml)
   echo "registry-admin-password: $ADMIN_USER_SECRET" >>$CWD/terraform-creds.yml
@@ -108,11 +108,11 @@ if [ -f "$TERRAFORM_OUTPUT_FILE" ]; then
   # Configure Opsmanager
 	$CWD/om --env $CWD/env-fix.yml configure-authentication --config $CWD/auth-fix.yml
 
-  if ! [ -f "$CWD/pks-api.cert" ]; then
-    $CWD/om --env $CWD/env-fix.yml generate-certificate -d "$($CWD/jq -r '.pks_api_hostname.value' $TERRAFORM_OUTPUT_FILE)" | $CWD/jq '.certificate,.key' > pks-api.cert
+  if ! [ -f "$CWD/tkgi-api.cert" ]; then
+    $CWD/om --env $CWD/env-fix.yml generate-certificate -d "$($CWD/jq -r '.tkgi_api_hostname.value' $TERRAFORM_OUTPUT_FILE)" | $CWD/jq '.certificate,.key' > tkgi-api.cert
   fi
-  echo "pksapi-cert.certificate: "$(head -n 1 pks-api.cert) >>$CWD/terraform-creds.yml
-  echo "pksapi-cert.private_key: "$(tail -n 1 pks-api.cert) >>$CWD/terraform-creds.yml
+  echo "tkgiapi-cert.certificate: "$(head -n 1 tkgi-api.cert) >>$CWD/terraform-creds.yml
+  echo "tkgiapi-cert.private_key: "$(tail -n 1 tkgi-api.cert) >>$CWD/terraform-creds.yml
 
   if ! [ -f "$CWD/harbor.cert" ]; then
     $CWD/om --env $CWD/env-fix.yml generate-certificate -d "$($CWD/jq -r '.harbor_hostname.value' $TERRAFORM_OUTPUT_FILE)" | $CWD/jq '.certificate,.key' > harbor.cert
@@ -128,7 +128,7 @@ if [ -f "$TERRAFORM_OUTPUT_FILE" ]; then
 
   # interpolate product yaml files with terraform creds and creds yaml files to substitute
   $CWD/om interpolate -c $CWD/srt.yml -l $CWD/creds.yml -l $CWD/terraform-creds.yml -s >$CWD/srt-fix.yml
-  $CWD/om interpolate -c $CWD/pks.yml -l $CWD/creds.yml -l $CWD/terraform-creds.yml -s >$CWD/pks-fix.yml
+  $CWD/om interpolate -c $CWD/tkgi.yml -l $CWD/creds.yml -l $CWD/terraform-creds.yml -s >$CWD/tkgi-fix.yml
   $CWD/om interpolate -c $CWD/harbor-container-registry.yml -l $CWD/creds.yml -l $CWD/terraform-creds.yml -s >$CWD/harbor-container-registry-fix.yml
 
   # Configure BOSH Director
@@ -142,14 +142,14 @@ if [ -f "$TERRAFORM_OUTPUT_FILE" ]; then
 	fi
 
   # download, upload & configure TKGI/PKS v1.8.x in opsmanager
-  $CWD/om interpolate -c $CWD/download-pks.yml -l $CWD/creds.yml -l $CWD/terraform-creds.yml -s >$CWD/download-pks-fix.yml
-	$CWD/om download-product --config $CWD/download-pks-fix.yml --output-directory $PIVNET_DOWNLOADED_FILE
+  $CWD/om interpolate -c $CWD/download-tkgi.yml -l $CWD/creds.yml -l $CWD/terraform-creds.yml -s >$CWD/download-tkgi-fix.yml
+	$CWD/om download-product --config $CWD/download-tkgi-fix.yml --output-directory $PIVNET_DOWNLOADED_FILE
   PRODUCT_PATH=$($CWD/om interpolate --config $PIVNET_DOWNLOADED_FILE/download-file.json --path /product_path)
 	$CWD/om --env $CWD/env-fix.yml upload-product --product $PRODUCT_PATH
   STEMCELL_PATH=$($CWD/om interpolate --config $PIVNET_DOWNLOADED_FILE/download-file.json --path '/stemcell_path?')
 	$CWD/om --env $CWD/env-fix.yml upload-stemcell --floating true --stemcell $STEMCELL_PATH
   $CWD/om --env $CWD/env-fix.yml stage-product --product-name $($CWD/om product-metadata --product-path $PRODUCT_PATH --product-name) --product-version $($CWD/om product-metadata --product-path $PRODUCT_PATH --product-version)
-  $CWD/om --env $CWD/env-fix.yml configure-product --config $CWD/pks-fix.yml
+  $CWD/om --env $CWD/env-fix.yml configure-product --config $CWD/tkgi-fix.yml
 
   # download, upload & configure Harbor v1.10.x in opsmanager
   $CWD/om interpolate -c $CWD/download-harbor.yml -l $CWD/creds.yml -l $CWD/terraform-creds.yml -s >$CWD/download-harbor-fix.yml
@@ -209,7 +209,7 @@ if [ -f "$TERRAFORM_OUTPUT_FILE" ]; then
     PIVNET_TOKEN=$(awk -F: '/^pivnet-token/{gsub(/ /,"",$2); print $2}' $CWD/creds.yml)
     get_clis $PIVNET_TOKEN
   fi
-  ./create-pks-admin-user.sh
+  ./create-tkgi-admin-user.sh
 
 fi
 trap : 0

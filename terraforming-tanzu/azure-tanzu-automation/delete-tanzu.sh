@@ -19,9 +19,9 @@ function abort()
 function get_om()
 {
 	if [ $OS == "Linux" ]; then
-		OM_FILE="https://github.com/pivotal-cf/om/releases/download/6.4.1/om-linux-6.4.1"
+		OM_FILE="https://github.com/pivotal-cf/om/releases/download/6.5.0/om-linux-6.5.0"
 	elif [ $OS == "Darwin" ]; then
-		OM_FILE="https://github.com/pivotal-cf/om/releases/download/6.4.1/om-darwin-6.4.1"
+		OM_FILE="https://github.com/pivotal-cf/om/releases/download/6.5.0/om-darwin-6.5.0"
 	fi
 	WGET_CMD="wget -q $OM_FILE -O $CWD/om"
 	if `$WGET_CMD`; then
@@ -37,7 +37,7 @@ if ! [ -x om ]; then
 fi
 
 $CWD/om --env $CWD/env-fix.yml delete-installation --force
-rm -rf $CWD/*-fix.yml $CWD/terraform-creds.yml $CWD/jq $CWD/om $CWD/pivnet $CWD/kubectl $CWD/pks $CWD/tkgi $CWD/downloaded-files $CWD/*.cert $CWD/terraform-output.json
+rm -rf $CWD/*-fix.yml $CWD/terraform-creds.yml $CWD/jq $CWD/om $CWD/pivnet $CWD/kubectl $CWD/pks $CWD/tkgi $CWD/downloaded-files $CWD/*.cert $CWD/remote-uaac-shell.sh $CWD/terraform-output.json
 
 trap : 0
 

@@ -38,8 +38,6 @@ module "infra" {
   virtual_network                       = var.virtual_network
   infrastructure_subnet                 = var.infrastructure_subnet
   services_subnet                       = var.services_subnet
-  infrastructure_subnet_security_group  = var.infrastructure_subnet_security_group
-  services_subnet_security_group        = var.services_subnet_security_group
 }
 
 module "ops_manager" {
@@ -58,8 +56,8 @@ module "ops_manager" {
   subnet_id           = module.infra.infrastructure_subnet_id
 }
 
-module "pas" {
-  source = "../modules/pas"
+module "tas" {
+  source = "../modules/tas"
 
   env_name                              = var.env_name
   location                              = var.location
@@ -86,13 +84,13 @@ module "certs" {
   ssl_ca_private_key = var.ssl_ca_private_key
 }
 
-module "pks" {
-  source = "../modules/pks"
+module "tkgi" {
+  source = "../modules/tkgi"
 
   env_name                = var.env_name
   location                = var.location
   harbor_lb_private_ip    = var.harbor_lb_private_ip
-  pks_lb_private_ip       = var.pks_lb_private_ip
+  tkgi_lb_private_ip      = var.tkgi_lb_private_ip
 
   resource_group_name     = module.infra.resource_group_name
   dns_zone_name           = module.infra.dns_zone_name

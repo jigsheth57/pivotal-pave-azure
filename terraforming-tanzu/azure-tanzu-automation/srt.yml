@@ -17,6 +17,14 @@ product-properties:
     value: true
   .mysql_monitor.recipient_email:
     value: cf-infra@pivotal.io
+  .properties.router_balancing_algorithm:
+    value: least-connection
+  .properties.autoscale_metric_bucket_count:
+    value: 60
+  .properties.autoscale_scaling_interval_in_seconds:
+    value: 15
+  .properties.autoscale_api_instance_count:
+    value: 2  
   .properties.credhub_internal_provider_keys:
     value:
     - key:
@@ -92,7 +100,7 @@ product-properties:
         private_key_pem: ((srt-cert.private_key))
 resource-config:
   compute:
-    instances: 5
+    instances: 6
   control:
     elb_names:
     - ((diego-ssh-lb-name))
