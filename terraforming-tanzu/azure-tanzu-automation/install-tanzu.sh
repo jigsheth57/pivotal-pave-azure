@@ -17,7 +17,7 @@ function abort()
 ***************
 '
     echo "An error occurred. Exiting..." >&2
-		exit 1
+    exit 1
 }
 function get_jq()
 {
@@ -99,14 +99,14 @@ if [ -f "$TERRAFORM_OUTPUT_FILE" ]; then
 
   # interpolate product yaml files with terraform creds and creds yaml files to substitute
   $CWD/om interpolate -c $CWD/env.yml -l $CWD/creds.yml -l $CWD/terraform-creds.yml -s >$CWD/env-fix.yml
-	$CWD/om interpolate -c $CWD/auth.yml -l $CWD/creds.yml -l $CWD/terraform-creds.yml -s >$CWD/auth-fix.yml
-	$CWD/om interpolate -c $CWD/director.yml -l $CWD/creds.yml -l $CWD/terraform-creds.yml -s >$CWD/director-fix.yml
+  $CWD/om interpolate -c $CWD/auth.yml -l $CWD/creds.yml -l $CWD/terraform-creds.yml -s >$CWD/auth-fix.yml
+  $CWD/om interpolate -c $CWD/director.yml -l $CWD/creds.yml -l $CWD/terraform-creds.yml -s >$CWD/director-fix.yml
 
   until nc -z $OPS_MANAGER 443; do echo waiting for $OPS_MANAGER:443; sleep 2; done;
   sleep 30;
 
   # Configure Opsmanager
-	$CWD/om --env $CWD/env-fix.yml configure-authentication --config $CWD/auth-fix.yml
+  $CWD/om --env $CWD/env-fix.yml configure-authentication --config $CWD/auth-fix.yml
 
   if ! [ -f "$CWD/tkgi-api.cert" ]; then
     $CWD/om --env $CWD/env-fix.yml generate-certificate -d "$($CWD/jq -r '.tkgi_api_hostname.value' $TERRAFORM_OUTPUT_FILE)" | $CWD/jq '.certificate,.key' > tkgi-api.cert
@@ -133,7 +133,7 @@ if [ -f "$TERRAFORM_OUTPUT_FILE" ]; then
 
   # Configure BOSH Director
   $CWD/om --env $CWD/env-fix.yml configure-director --config $CWD/director-fix.yml
-	$CWD/om --env $CWD/env-fix.yml apply-changes --skip-deploy-products
+  $CWD/om --env $CWD/env-fix.yml apply-changes --skip-deploy-products
 
   # Download & upload tiles to Ops Manager
   PIVNET_DOWNLOADED_FILE=$CWD/downloaded-files
@@ -143,11 +143,11 @@ if [ -f "$TERRAFORM_OUTPUT_FILE" ]; then
 
   # download, upload & configure TKGI/PKS v1.8.x in opsmanager
   $CWD/om interpolate -c $CWD/download-tkgi.yml -l $CWD/creds.yml -l $CWD/terraform-creds.yml -s >$CWD/download-tkgi-fix.yml
-	$CWD/om download-product --config $CWD/download-tkgi-fix.yml --output-directory $PIVNET_DOWNLOADED_FILE
+  $CWD/om download-product --config $CWD/download-tkgi-fix.yml --output-directory $PIVNET_DOWNLOADED_FILE
   PRODUCT_PATH=$($CWD/om interpolate --config $PIVNET_DOWNLOADED_FILE/download-file.json --path /product_path)
-	$CWD/om --env $CWD/env-fix.yml upload-product --product $PRODUCT_PATH
+  $CWD/om --env $CWD/env-fix.yml upload-product --product $PRODUCT_PATH
   STEMCELL_PATH=$($CWD/om interpolate --config $PIVNET_DOWNLOADED_FILE/download-file.json --path '/stemcell_path?')
-	$CWD/om --env $CWD/env-fix.yml upload-stemcell --floating true --stemcell $STEMCELL_PATH
+  $CWD/om --env $CWD/env-fix.yml upload-stemcell --floating true --stemcell $STEMCELL_PATH
   $CWD/om --env $CWD/env-fix.yml stage-product --product-name $($CWD/om product-metadata --product-path $PRODUCT_PATH --product-name) --product-version $($CWD/om product-metadata --product-path $PRODUCT_PATH --product-version)
   $CWD/om --env $CWD/env-fix.yml configure-product --config $CWD/tkgi-fix.yml
 
@@ -155,7 +155,7 @@ if [ -f "$TERRAFORM_OUTPUT_FILE" ]; then
   $CWD/om interpolate -c $CWD/download-harbor.yml -l $CWD/creds.yml -l $CWD/terraform-creds.yml -s >$CWD/download-harbor-fix.yml
   $CWD/om download-product --config $CWD/download-harbor-fix.yml --output-directory $PIVNET_DOWNLOADED_FILE
   PRODUCT_PATH=$($CWD/om interpolate --config $PIVNET_DOWNLOADED_FILE/download-file.json --path /product_path)
-	$CWD/om --env $CWD/env-fix.yml upload-product --product $PRODUCT_PATH
+  $CWD/om --env $CWD/env-fix.yml upload-product --product $PRODUCT_PATH
   STEMCELL_PATH=$($CWD/om interpolate --config $PIVNET_DOWNLOADED_FILE/download-file.json --path '/stemcell_path?')
   $CWD/om --env $CWD/env-fix.yml upload-stemcell --floating true --stemcell $STEMCELL_PATH
   $CWD/om --env $CWD/env-fix.yml stage-product --product-name $($CWD/om product-metadata --product-path $PRODUCT_PATH --product-name) --product-version $($CWD/om product-metadata --product-path $PRODUCT_PATH --product-version)
@@ -163,9 +163,9 @@ if [ -f "$TERRAFORM_OUTPUT_FILE" ]; then
 
   # download, upload & configure TAS/PCF v2.9.x in opsmanager
   $CWD/om interpolate -c $CWD/download-srt.yml -l $CWD/creds.yml -l $CWD/terraform-creds.yml -s >$CWD/download-srt-fix.yml
-	$CWD/om download-product --config $CWD/download-srt-fix.yml --output-directory $PIVNET_DOWNLOADED_FILE
+  $CWD/om download-product --config $CWD/download-srt-fix.yml --output-directory $PIVNET_DOWNLOADED_FILE
   PRODUCT_PATH=$($CWD/om interpolate --config $PIVNET_DOWNLOADED_FILE/download-file.json --path /product_path)
-	$CWD/om --env $CWD/env-fix.yml upload-product --product $PRODUCT_PATH
+  $CWD/om --env $CWD/env-fix.yml upload-product --product $PRODUCT_PATH
   STEMCELL_PATH=$($CWD/om interpolate --config $PIVNET_DOWNLOADED_FILE/download-file.json --path '/stemcell_path?')
   $CWD/om --env $CWD/env-fix.yml upload-stemcell --floating true --stemcell $STEMCELL_PATH
   $CWD/om --env $CWD/env-fix.yml stage-product --product-name $($CWD/om product-metadata --product-path $PRODUCT_PATH --product-name) --product-version $($CWD/om product-metadata --product-path $PRODUCT_PATH --product-version)
@@ -173,9 +173,9 @@ if [ -f "$TERRAFORM_OUTPUT_FILE" ]; then
 
   # download, upload & configure Metric Store v1.4.x in opsmanager
   $CWD/om interpolate -c $CWD/download-metricstore.yml -l $CWD/creds.yml -l $CWD/terraform-creds.yml -s >$CWD/download-metricstore-fix.yml
-	$CWD/om download-product --config $CWD/download-metricstore-fix.yml --output-directory $PIVNET_DOWNLOADED_FILE
+  $CWD/om download-product --config $CWD/download-metricstore-fix.yml --output-directory $PIVNET_DOWNLOADED_FILE
   PRODUCT_PATH=$($CWD/om interpolate --config $PIVNET_DOWNLOADED_FILE/download-file.json --path /product_path)
-	$CWD/om --env $CWD/env-fix.yml upload-product --product $PRODUCT_PATH
+  $CWD/om --env $CWD/env-fix.yml upload-product --product $PRODUCT_PATH
   STEMCELL_PATH=$($CWD/om interpolate --config $PIVNET_DOWNLOADED_FILE/download-file.json --path '/stemcell_path?')
   $CWD/om --env $CWD/env-fix.yml upload-stemcell --floating true --stemcell $STEMCELL_PATH
   $CWD/om --env $CWD/env-fix.yml stage-product --product-name $($CWD/om product-metadata --product-path $PRODUCT_PATH --product-name) --product-version $($CWD/om product-metadata --product-path $PRODUCT_PATH --product-version)
@@ -183,9 +183,9 @@ if [ -f "$TERRAFORM_OUTPUT_FILE" ]; then
 
   # download, upload & configure App Metric v2.0.x in opsmanager
   $CWD/om interpolate -c $CWD/download-apm.yml -l $CWD/creds.yml -l $CWD/terraform-creds.yml -s >$CWD/download-apm-fix.yml
-	$CWD/om download-product --config $CWD/download-apm-fix.yml --output-directory $PIVNET_DOWNLOADED_FILE
+  $CWD/om download-product --config $CWD/download-apm-fix.yml --output-directory $PIVNET_DOWNLOADED_FILE
   PRODUCT_PATH=$($CWD/om interpolate --config $PIVNET_DOWNLOADED_FILE/download-file.json --path /product_path)
-	$CWD/om --env $CWD/env-fix.yml upload-product --product $PRODUCT_PATH
+  $CWD/om --env $CWD/env-fix.yml upload-product --product $PRODUCT_PATH
   STEMCELL_PATH=$($CWD/om interpolate --config $PIVNET_DOWNLOADED_FILE/download-file.json --path '/stemcell_path?')
   $CWD/om --env $CWD/env-fix.yml upload-stemcell --floating true --stemcell $STEMCELL_PATH
   $CWD/om --env $CWD/env-fix.yml stage-product --product-name $($CWD/om product-metadata --product-path $PRODUCT_PATH --product-name) --product-version $($CWD/om product-metadata --product-path $PRODUCT_PATH --product-version)
@@ -193,9 +193,9 @@ if [ -f "$TERRAFORM_OUTPUT_FILE" ]; then
 
   # download, upload & configure Healthwatch v1.8.x in opsmanager
   $CWD/om interpolate -c $CWD/download-healthwatch.yml -l $CWD/creds.yml -l $CWD/terraform-creds.yml -s >$CWD/download-healthwatch-fix.yml
-	$CWD/om download-product --config $CWD/download-healthwatch-fix.yml --output-directory $PIVNET_DOWNLOADED_FILE
+  $CWD/om download-product --config $CWD/download-healthwatch-fix.yml --output-directory $PIVNET_DOWNLOADED_FILE
   PRODUCT_PATH=$($CWD/om interpolate --config $PIVNET_DOWNLOADED_FILE/download-file.json --path /product_path)
-	$CWD/om --env $CWD/env-fix.yml upload-product --product $PRODUCT_PATH
+  $CWD/om --env $CWD/env-fix.yml upload-product --product $PRODUCT_PATH
   STEMCELL_PATH=$($CWD/om interpolate --config $PIVNET_DOWNLOADED_FILE/download-file.json --path '/stemcell_path?')
   $CWD/om --env $CWD/env-fix.yml upload-stemcell --floating true --stemcell $STEMCELL_PATH
   $CWD/om --env $CWD/env-fix.yml stage-product --product-name $($CWD/om product-metadata --product-path $PRODUCT_PATH --product-name) --product-version $($CWD/om product-metadata --product-path $PRODUCT_PATH --product-version)
