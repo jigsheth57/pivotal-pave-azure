@@ -166,7 +166,6 @@ resource "azurerm_linux_virtual_machine" "jumpbox_vm" {
     resource_group_name   = azurerm_resource_group.network_resource_group.name
     network_interface_ids = [azurerm_network_interface.jumpbox_nic.id]
     size                  = "Standard_DS1_v2"
-    delete_os_disk_on_termination = "true"
     os_disk {
         name              = "${var.env_name}-jumpbox-disk"
         caching           = "ReadWrite"
