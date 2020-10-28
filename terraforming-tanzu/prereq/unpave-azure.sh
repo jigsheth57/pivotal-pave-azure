@@ -41,7 +41,7 @@ if [ -f "$TERRAFORM_INPUT_FILE" ]; then
     get_terrform
   fi
   $CWD/terraform destroy -auto-approve
-  rm -rf $TERRAFORM_OUTPUT_FILE $CWD/tanzu-prereq.tfplan $CWD/jq $CWD/terraform.zip $CWD/terraform $CWD/terraform.tfstate* $CWD/.terraform
+  rm -rf $TERRAFORM_OUTPUT_FILE $CWD/tanzu-prereq.tfplan $CWD/jumpbox.pem $CWD/jq $CWD/terraform.zip $CWD/terraform $CWD/terraform.tfstate* $CWD/.terraform
 fi
 trap : 0
 
