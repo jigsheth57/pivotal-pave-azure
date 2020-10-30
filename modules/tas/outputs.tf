@@ -1,9 +1,11 @@
 output "sys_domain" {
-  value = "sys.${azurerm_dns_a_record.sys.zone_name}"
+  value = "sys.${var.dns_subdomain}.${var.dns_suffix}"
+#  value = "sys.${azurerm_dns_a_record.sys.zone_name}"
 }
 
 output "apps_domain" {
-  value = "apps.${azurerm_dns_a_record.apps.zone_name}"
+  value = "apps.${var.dns_subdomain}.${var.dns_suffix}"
+#  value = "apps.${azurerm_dns_a_record.apps.zone_name}"
 }
 
 output "web_lb_name" {

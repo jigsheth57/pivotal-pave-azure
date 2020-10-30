@@ -32,9 +32,12 @@ variable "subnet_id" {
   default = ""
 }
 
-variable "dns_zone_name" {
-  default = ""
-}
+variable "dns_subdomain" {}
+variable "dns_suffix" {}
+
+# variable "dns_zone_name" {
+#   default = ""
+# }
 
 resource random_string "ops_manager_storage_account_name" {
   length  = 20

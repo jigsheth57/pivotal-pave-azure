@@ -1,7 +1,9 @@
 variable "env_name" {}
 variable "location" {}
 variable "resource_group_name" {}
-variable "dns_zone_name" {}
+# variable "dns_zone_name" {}
+variable "dns_subdomain" {}
+variable "dns_suffix" {}
 
 variable "cf_buildpacks_storage_container_name" {}
 variable "cf_droplets_storage_container_name" {}

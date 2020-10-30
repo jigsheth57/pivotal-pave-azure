@@ -1,7 +1,8 @@
 # ==================== Outputs
 
 output "dns_name" {
-  value = "${azurerm_dns_a_record.ops_manager_dns.name}.${azurerm_dns_a_record.ops_manager_dns.zone_name}"
+#  value = "${azurerm_dns_a_record.ops_manager_dns.name}.${azurerm_dns_a_record.ops_manager_dns.zone_name}"
+  value = "opsman.${var.dns_subdomain}.${var.dns_suffix}"
 }
 
 output "ops_manager_private_ip" {

@@ -4,5 +4,5 @@ variable "network_resource_group" {}
 variable "virtual_network" {}
 variable "infrastructure_subnet" {}
 variable "services_subnet" {}
-variable "dns_subdomain" {}
-variable "dns_suffix" {}
+# variable "dns_subdomain" {}
+# variable "dns_suffix" {}

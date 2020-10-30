@@ -1,4 +1,4 @@
-variable "env_name" {
+variable "dns_subdomain" {
   default = ""
 }
 
@@ -19,16 +19,16 @@ resource "tls_cert_request" "ssl_csr" {
   private_key_pem = tls_private_key.ssl_private_key[count.index].private_key_pem
 
   dns_names = [
-    "*.apps.${var.env_name}.${var.dns_suffix}",
-    "*.sys.${var.env_name}.${var.dns_suffix}",
+    "*.apps.${var.dns_subdomain}.${var.dns_suffix}",
+    "*.sys.${var.dns_subdomain}.${var.dns_suffix}",
   ]
 
   count = length(var.ssl_ca_cert) > 0 ? 1 : 0
 
   subject {
-    common_name         = "${var.env_name}.${var.dns_suffix}"
-    organization        = "Pivotal"
-    organizational_unit = "Cloudfoundry"
+    common_name         = "${var.dns_subdomain}.${var.dns_suffix}"
+    organization        = "VMware Inc"
+    organizational_unit = "Tanzu"
     country             = "US"
     province            = "CA"
     locality            = "San Francisco"

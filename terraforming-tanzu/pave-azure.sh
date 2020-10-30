@@ -60,9 +60,9 @@ if [ -f "$TERRAFORM_INPUT_FILE" ]; then
   $CWD/terraform plan -out=tanzu.tfplan
   $CWD/terraform apply tanzu.tfplan
   $CWD/terraform output -json >$TERRAFORM_OUTPUT_FILE
-  NS_RECORDS=$($CWD/jq -r '.env_dns_zone_name_servers.value[]' $TERRAFORM_OUTPUT_FILE)
-  DOMAIN_ZONE=$($CWD/jq -r '.pks_api_hostname.value' $TERRAFORM_OUTPUT_FILE | cut -d'.' -f2-)
-  echo -e "Make sure following NS entries have been added to your external facing DNS ($DOMAIN_ZONE) before proceeding:\n$NS_RECORDS"
+#  NS_RECORDS=$($CWD/jq -r '.env_dns_zone_name_servers.value[]' $TERRAFORM_OUTPUT_FILE)
+#  DOMAIN_ZONE=$($CWD/jq -r '.pks_api_hostname.value' $TERRAFORM_OUTPUT_FILE | cut -d'.' -f2-)
+#  echo -e "Make sure following NS entries have been added to your external facing DNS ($DOMAIN_ZONE) before proceeding:\n$NS_RECORDS"
   # read -p "Will continue in 2 minutes, please update your public DNS server ($DOMAIN_ZONE) with above NS records...." -t 120
   # echo "Will continue in 2 minutes ...."
   # sleep 120

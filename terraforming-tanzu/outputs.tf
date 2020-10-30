@@ -30,12 +30,12 @@ output "network_resource_group" {
   value = var.network_resource_group
 }
 # Output from infra module
-output "dns_subdomain" {
-  value = module.infra.dns_zone_name
-}
-output "env_dns_zone_name_servers" {
-  value = module.infra.dns_zone_name_servers
-}
+# output "dns_subdomain" {
+#   value = module.infra.dns_zone_name
+# }
+# output "env_dns_zone_name_servers" {
+#   value = module.infra.dns_zone_name_servers
+# }
 output "tanzu_resource_group_name" {
   value = module.infra.resource_group_name
 }
@@ -143,14 +143,4 @@ output "harbor_hostname" {
 }
 output "tkgi_availability_set" {
   value = module.tkgi.tkgi_availability_set
-}
-
-# Output from certs module
-output "ssl_cert" {
-  sensitive = true
-  value     = length(module.certs.ssl_cert) > 0 ? module.certs.ssl_cert : var.ssl_cert
-}
-output "ssl_private_key" {
-  sensitive = true
-  value     = length(module.certs.ssl_private_key) > 0 ? module.certs.ssl_private_key : var.ssl_private_key
 }

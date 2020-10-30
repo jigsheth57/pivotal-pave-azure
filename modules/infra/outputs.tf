@@ -1,10 +1,10 @@
-output "dns_zone_name" {
-  value = azurerm_dns_zone.env_dns_zone.name
-}
+# output "dns_zone_name" {
+#   value = azurerm_dns_zone.env_dns_zone.name
+# }
 
-output "dns_zone_name_servers" {
-  value = azurerm_dns_zone.env_dns_zone.name_servers
-}
+# output "dns_zone_name_servers" {
+#   value = azurerm_dns_zone.env_dns_zone.name_servers
+# }
 
 output "resource_group_name" {
   value = data.azurerm_resource_group.pcf_resource_group.name

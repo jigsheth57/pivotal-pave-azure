@@ -97,12 +97,12 @@ resource "azurerm_subnet_network_security_group_association" "services_subnet_se
 
 # ============= DNS
 
-locals {
-  dns_subdomain = var.env_name
-}
+# locals {
+#   dns_subdomain = var.env_name
+# }
 
 # resource "azurerm_dns_zone" "env_dns_zone" {
-resource "azurerm_dns_zone" "env_dns_zone" {
-  name                = "${var.dns_subdomain != "" ? var.dns_subdomain : local.dns_subdomain}.${var.dns_suffix}"
-  resource_group_name = var.env_name
-}
+# resource "azurerm_dns_zone" "env_dns_zone" {
+#   name                = "${var.dns_subdomain != "" ? var.dns_subdomain : local.dns_subdomain}.${var.dns_suffix}"
+#   resource_group_name = var.env_name
+# }
