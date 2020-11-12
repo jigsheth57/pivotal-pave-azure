@@ -1,0 +1,28 @@
+# https://docs.pivotal.io/platform/ops-manager/2-9/azure/prepare-azure-terraform.html
+# az cloud set --name AzureCloud
+# az ad app create --display-name "Service Principal for BOSH" --password "PASSWORD" --homepage "http://BOSHAzureCPI" --identifier-uris "http://BOSHAzureCPI"
+# az ad sp create --id YOUR-APPLICATION-ID
+# az role assignment create --assignee "SERVICE-PRINCIPAL-NAME" --role "Contributor" --resource-group "RESOURCE-GROUP-NAME"
+# az role assignment list --assignee "SERVICE-PRINCIPAL-NAME" --resource-group "RESOURCE-GROUP-NAME"
+# az provider register --namespace Microsoft.Storage
+# az provider register --namespace Microsoft.Network
+# az provider register --namespace Microsoft.Compute
+
+subscription_id       = "XZ-I-N-SUB-01-CNI"
+tenant_id             = "XXXX"
+client_id             = "XXXX"
+client_secret         = "XXXX"
+
+# Resource Group name is the env_name
+env_name              = "XZE-I-N-NETWORK2-RGP-01"
+
+location              = "EastUS2"
+ops_manager_image_uri = "https://opsmanagereastus.blob.core.windows.net/images/ops-manager-2.9.12-build.198.vhd"
+dns_suffix            = "exelonds.com"
+dns_subdomain         = "tanzu"
+azure_master_managed_identity = "tkgi-master"
+azure_worker_managed_identity = "tkgi-worker"
+network_resource_group = "XZE-I-N-NETWORK2-RGP-01"
+virtual_network = "XZE-I-N-VNT2-01"
+infrastructure_subnet = "XZE-I-N-SNT-01-TR-172.25.84.0-25-TANZU-MGMT-01"
+services_subnet = "XZE-I-N-SNT-01-TR-172.25.85.0-24-TANZU-SERVICES-01"
